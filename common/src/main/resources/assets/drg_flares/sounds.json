@@ -1,0 +1,34 @@
+{
+  "flare_throw": {
+    "subtitle": "subtitles.drg_flares.flare_throw",
+    "sounds": [
+      "drg_flares:flare_throw1",
+      "drg_flares:flare_throw2",
+      "drg_flares:flare_throw3",
+      "drg_flares:flare_throw4",
+      "drg_flares:flare_throw5",
+      "drg_flares:flare_throw6"
+    ]
+  },
+  "flare_bounce": {
+    "sounds": [
+      "drg_flares:flare_bounce1",
+      "drg_flares:flare_bounce2",
+      "drg_flares:flare_bounce3",
+      "drg_flares:flare_bounce4",
+      "drg_flares:flare_bounce5",
+      "drg_flares:flare_bounce5"
+    ]
+  },
+  "flare_bounce_far": {
+    "subtitle": "subtitles.drg_flares.flare_bounce",
+    "sounds": [
+      "drg_flares:flare_bounce_far1",
+      "drg_flares:flare_bounce_far2",
+      "drg_flares:flare_bounce_far3",
+      "drg_flares:flare_bounce_far4",
+      "drg_flares:flare_bounce_far5",
+      "drg_flares:flare_bounce_far5"
+    ]
+  }
+}

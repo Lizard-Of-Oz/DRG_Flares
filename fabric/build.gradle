@@ -1,0 +1,76 @@
+plugins {
+    id "com.github.johnrengelman.shadow" version "5.0.0"
+}
+
+archivesBaseName = "${rootProject.archives_base_name}-1.16-fabric"
+
+architectury {
+    platformSetupLoomIde()
+    fabric()
+}
+
+configurations {
+    common
+    shadowCommon
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentFabric.extendsFrom common
+}
+
+repositories {
+    maven { url "https://maven.terraformersmc.com/" }
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    //Modding platform
+    modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+
+    //Other mods we do integration with
+    modCompileOnly "io.github.prospector:modmenu:1.14.13+build.22"
+    modCompileOnly ("com.github.Lizard-Of-Oz.Inventorio:inventorio-1.16-fabric:1.16-SNAPSHOT") { transitive = false }
+
+    //"Common" package
+    implementation(project(path: ":common")) {
+        transitive = false
+    }
+    developmentFabric(project(path: ":common")) {
+        transitive = false
+    }
+    shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) {
+        transitive = false
+    }
+}
+
+shadowJar {
+    configurations = [project.configurations.shadowCommon]
+    classifier "dev-shadow"
+}
+
+remapJar {
+    input.set shadowJar.archiveFile
+    dependsOn shadowJar
+}
+
+jar {
+    classifier "dev"
+}
+
+sourcesJar {
+    def commonSources = project(":common").sourcesJar
+    dependsOn commonSources
+    from commonSources.archiveFile.map { zipTree(it) }
+}
+
+publishing {
+    publications {
+        mavenFabric(MavenPublication) {
+            artifactId = archivesBaseName
+            artifact remapJar
+            artifact(sourcesJar) {
+                builtBy remapSourcesJar
+            }
+        }
+    }
+}

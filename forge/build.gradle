@@ -1,0 +1,81 @@
+plugins {
+    id "com.github.johnrengelman.shadow" version "5.0.0"
+}
+
+archivesBaseName = "${rootProject.archives_base_name}-1.16-forge"
+
+configurations {
+    shadowCommon
+}
+
+architectury {
+    platformSetupLoomIde()
+    forge()
+}
+
+minecraft {
+    runs {
+        client {
+            property "forge.logging.console.level", "debug"
+        }
+    }
+}
+
+loom {
+    mixinConfig "drg_flares.mixins.json"
+}
+repositories {
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    //Modding platform
+    forge "net.minecraftforge:forge:${rootProject.minecraft_version}-${rootProject.forge_version}"
+    modImplementation("me.shedaniel.cloth:cloth-config-forge:${rootProject.cloth_config_version}")
+
+    //Other mods we do integration with
+    compileOnly ('com.github.Lizard-Of-Oz.Inventorio:inventorio-1.16-forge:1.16-SNAPSHOT') { transitive = false }
+
+    //Other modules of this project
+    implementation(project(path: ":common")) {
+        transitive = false
+    }
+    developmentForge(project(path: ":common")) {
+        transitive = false
+    }
+    shadowCommon(project(path: ":common", configuration: "transformProductionForge")) {
+        transitive = false
+    }
+}
+
+shadowJar {
+    configurations = [project.configurations.shadowCommon]
+    classifier "dev-shadow"
+}
+
+remapJar {
+    input.set shadowJar.archiveFile
+    dependsOn shadowJar
+}
+
+jar {
+    classifier "dev"
+}
+
+sourcesJar {
+    def commonSources = project(":common").sourcesJar
+    dependsOn commonSources
+    from commonSources.archiveFile.map { zipTree(it) }
+}
+
+publishing {
+    publications {
+        mavenForge(MavenPublication) {
+            artifactId = archivesBaseName
+            artifact remapJar
+            artifact(sourcesJar) {
+                builtBy remapSourcesJar
+            }
+        }
+    }
+}

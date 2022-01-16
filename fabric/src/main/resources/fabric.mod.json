@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "${mod_id}",
+  "version": "${mod_version}",
+  "name": "${mod_name}",
+  "description": "${mod_description}",
+  "authors": ["LizardOfOz"],
+  "contact": {
+    "sources": "${github}",
+    "homepage": "${github}",
+    "issues": "${github}/issues"
+  },
+
+  "icon": "icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "me.lizardofoz.drgflares.DRGFlaresFabric"
+    ],
+    "modmenu": [
+      "me.lizardofoz.drgflares.ModMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "drg_flares.mixins.json"
+  ],
+  "depends": {
+    "minecraft": "1.16.x",
+    "fabricloader": ">=${fabric_loader_version}",
+    "fabric": "*"
+  }
+}
