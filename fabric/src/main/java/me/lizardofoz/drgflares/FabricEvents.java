@@ -31,7 +31,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-
 import java.util.Collection;
 
 public class FabricEvents
@@ -42,6 +41,8 @@ public class FabricEvents
     {
         //Server Start
         ServerLifecycleEvents.SERVER_STARTED.register((server) -> {
+            DRGFlareLimiter.clear();
+            DRGFlarePlayerAspect.clear();
             FlareLightBlock.refreshBlockStates();
             ServerSettings.CURRENT.loadFromJson(ServerSettings.LOCAL.asJson());
             if (!ServerSettings.CURRENT.flareRecipesInSurvival.value)
@@ -60,13 +61,17 @@ public class FabricEvents
 
         //Player Join
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
-            DRGFlarePlayerAspect.add(handler.player);
+            DRGFlareLimiter.onPlayerJoin(handler.player);
+            DRGFlarePlayerAspect.onPlayerJoin(handler.player);
             DRGFlaresUtil.unlockFlareRecipes(handler.player);
             PacketStuff.sendSettingsSyncPacket(handler.player);
         });
 
         //Player Leave
-        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> DRGFlarePlayerAspect.remove(handler.player));
+        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
+            DRGFlareLimiter.onPlayerLeave(handler.player);
+            DRGFlarePlayerAspect.onPlayerLeave(handler.player);
+        });
 
         //Packets
         ServerPlayNetworking.registerGlobalReceiver(ThrowFlareC2SPacket.IDENTIFIER, (server, player, handler, buf, sender) ->

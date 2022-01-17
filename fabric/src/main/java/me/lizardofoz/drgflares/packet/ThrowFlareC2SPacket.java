@@ -17,7 +17,6 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.Identifier;
-
 import java.util.List;
 import java.util.Map;
 
@@ -52,14 +51,14 @@ public class ThrowFlareC2SPacket
         server.execute(() -> {
             if (ServerSettings.CURRENT.regeneratingFlaresEnabled.value)
             {
-                DRGFlarePlayerAspect data = DRGFlarePlayerAspect.get(player);
-                if (data == null || !data.checkFlareToss(player) || DRGFlaresUtil.isRegenFlareOnCooldown(player) || player.isSpectator())
+                DRGFlarePlayerAspect playerAspect = DRGFlarePlayerAspect.get(player);
+                if (playerAspect == null || !playerAspect.checkFlareToss(player) || DRGFlaresUtil.isRegenFlareOnCooldown(player) || player.isSpectator())
                     return;
                 FlareEntity.throwFlare(player, color);
                 Map<FlareColor, Item> itemTypes = DRGFlareRegistry.getInstance().getFlareItemTypes();
                 player.getItemCooldownManager().set(itemTypes.get(FlareColor.RED), 5);
                 player.incrementStat(Stats.USED.getOrCreateStat(itemTypes.get(color)));
-                data.reduceFlareCount(player);
+                playerAspect.reduceFlareCount(player);
             }
             else
             {

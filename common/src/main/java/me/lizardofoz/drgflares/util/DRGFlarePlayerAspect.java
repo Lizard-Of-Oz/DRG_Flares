@@ -2,46 +2,40 @@ package me.lizardofoz.drgflares.util;
 
 import lombok.Getter;
 import me.lizardofoz.drgflares.config.ServerSettings;
-import me.lizardofoz.drgflares.entity.FlareEntity;
 import net.minecraft.entity.player.PlayerEntity;
-
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class DRGFlarePlayerAspect
 {
-    private static final Map<PlayerEntity, DRGFlarePlayerAspect> dataMap = new HashMap<>();
+    private static final Map<PlayerEntity, DRGFlarePlayerAspect> playerMap = new HashMap<>();
 
     public static final DRGFlarePlayerAspect clientLocal = new DRGFlarePlayerAspect();
-    public static final DRGFlarePlayerAspect unknownOrigin = new DRGFlarePlayerAspect();
 
-    public static void add(PlayerEntity player)
+    public static void clear()
     {
-        dataMap.put(player, new DRGFlarePlayerAspect());
+        playerMap.clear();
     }
 
-    public static void remove(PlayerEntity player)
+    public static void onPlayerJoin(PlayerEntity player)
     {
-        dataMap.remove(player);
+        playerMap.put(player, new DRGFlarePlayerAspect());
+    }
+
+    public static void onPlayerLeave(PlayerEntity player)
+    {
+        playerMap.remove(player);
     }
 
     public static DRGFlarePlayerAspect get(PlayerEntity player)
     {
-        return dataMap.get(player);
-    }
-
-    public static List<DRGFlarePlayerAspect> getValues()
-    {
-        return new ArrayList<>(dataMap.values());
+        return playerMap.get(player);
     }
 
     public static void tickAll()
     {
-        for (DRGFlarePlayerAspect value : dataMap.values())
+        for (DRGFlarePlayerAspect value : playerMap.values())
             value.tick();
-        unknownOrigin.tick();
     }
 
     //Yes I know, separating the static part like this is kinda ugly, but I don't think this mod is big enough to justify using Kotlin
@@ -49,11 +43,7 @@ public class DRGFlarePlayerAspect
     @Getter private int flaresLeft;
     @Getter private int flareRegenStatus;
 
-    public int flareEntityCount;
-    public int oldestFlareLifetime;
-    public FlareEntity oldestFlare;
-
-    public DRGFlarePlayerAspect()
+    private DRGFlarePlayerAspect()
     {
         reset();
     }
@@ -77,6 +67,7 @@ public class DRGFlarePlayerAspect
             }
         }
     }
+
     public void reduceFlareCount(PlayerEntity player)
     {
         if (!DRGFlaresUtil.hasUnlimitedRegeneratingFlares(player) && ServerSettings.CURRENT.regeneratingFlaresEnabled.value)

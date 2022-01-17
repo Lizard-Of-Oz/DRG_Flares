@@ -141,8 +141,9 @@ public class FlareEntity extends ThrownEntity
         {
             float pitch = 1.1f + world.random.nextFloat() * 0.3f;
             float volume = PlayerSettings.INSTANCE.flareSoundVolume.value / 100.0f;
+            float farVolume = volume < 0.25f ? volume * 3 : volume < 0.5f ? volume * 2 : volume;
             DRGFlaresUtil.playSoundFromEntityOnClient(this, DRGFlareRegistry.getInstance().FLARE_BOUNCE_EVENT, SoundCategory.MASTER, volume, pitch);
-            DRGFlaresUtil.playSoundFromEntityOnClient(this, DRGFlareRegistry.getInstance().FLARE_BOUNCE_FAR_EVENT, SoundCategory.MASTER, volume * 3, pitch);
+            DRGFlaresUtil.playSoundFromEntityOnClient(this, DRGFlareRegistry.getInstance().FLARE_BOUNCE_FAR_EVENT, SoundCategory.MASTER, farVolume * 3, pitch);
         }
 
         //If we don't disable gravity, a flare will just bob up and down when laying on the ground
@@ -242,7 +243,7 @@ public class FlareEntity extends ThrownEntity
                     //By having an old light source survive for longer than it takes to spawn a new one, we make sure the flicker doesn't happen
                     BlockEntity blockEntity = world.getBlockEntity(lightBlockPos);
                     if (blockEntity instanceof FlareLightBlockEntity)
-                        ((FlareLightBlockEntity) blockEntity).lifespan = isInWaterBlock ? -20 : 0;
+                        ((FlareLightBlockEntity) blockEntity).refresh(isInWaterBlock ? 20 : 0);
                     else
                         lightBlockPos = null;
                 }

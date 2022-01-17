@@ -8,11 +8,16 @@ import net.minecraft.util.Tickable;
 
 public class FlareLightBlockEntity extends BlockEntity implements Tickable
 {
-    public int lifespan = 0;
+    private int lifespan = 0;
 
     public FlareLightBlockEntity()
     {
         super(DRGFlareRegistry.getInstance().getLightSourceBlockEntityType());
+    }
+
+    public void refresh(int lifeExtension)
+    {
+        lifespan = -lifeExtension;
     }
 
     @Override

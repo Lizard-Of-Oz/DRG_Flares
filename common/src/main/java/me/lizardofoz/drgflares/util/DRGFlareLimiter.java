@@ -2,9 +2,10 @@ package me.lizardofoz.drgflares.util;
 
 import me.lizardofoz.drgflares.config.ServerSettings;
 import me.lizardofoz.drgflares.entity.FlareEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Here's how this whole thing works:<br/>
@@ -18,19 +19,35 @@ import java.util.List;
  */
 public class DRGFlareLimiter
 {
+    private static final Map<PlayerEntity, TrackerInstance> playerMap = new HashMap<>();
+
+    private DRGFlareLimiter() { }
+
+    public static void clear()
+    {
+        playerMap.clear();
+        playerMap.put(null, new TrackerInstance());
+    }
+
+    public static void onPlayerJoin(PlayerEntity playerEntity)
+    {
+        playerMap.put(playerEntity, new TrackerInstance());
+    }
+
+    public static void onPlayerLeave(PlayerEntity playerEntity)
+    {
+        playerMap.remove(playerEntity);
+    }
+
     public static void tick()
     {
         if (ServerSettings.CURRENT.flareEntityLimitPerPlayer.value <= 0)
             return;
-        List<DRGFlarePlayerAspect> playerAspects = DRGFlarePlayerAspect.getValues();
-        playerAspects.add(DRGFlarePlayerAspect.unknownOrigin);
-        for (DRGFlarePlayerAspect playerAspect : playerAspects)
+        for (TrackerInstance tracker : playerMap.values())
         {
-            if (playerAspect.flareEntityCount > ServerSettings.CURRENT.flareEntityLimitPerPlayer.value && playerAspect.oldestFlare != null)
-                playerAspect.oldestFlare.kill();
-            playerAspect.flareEntityCount = 0;
-            playerAspect.oldestFlareLifetime = -1;
-            playerAspect.oldestFlare = null;
+            if (tracker.flareEntityCount > ServerSettings.CURRENT.flareEntityLimitPerPlayer.value && tracker.oldestFlare != null)
+                tracker.oldestFlare.kill();
+            tracker.reset();
         }
     }
 
@@ -38,18 +55,33 @@ public class DRGFlareLimiter
     {
         if (ServerSettings.CURRENT.flareEntityLimitPerPlayer.value <= 0)
             return;
-        DRGFlarePlayerAspect aspect = DRGFlarePlayerAspect.unknownOrigin;
-        if (entity.getOwner() instanceof PlayerEntity)
-        {
-            DRGFlarePlayerAspect livingPlayerAspect = DRGFlarePlayerAspect.get((PlayerEntity) entity.getOwner());
-            if (livingPlayerAspect != null)
-                aspect = livingPlayerAspect;
-        }
+
+        TrackerInstance aspect = null;
+        Entity owner = entity.getOwner();
+        if (owner instanceof PlayerEntity)
+            aspect = playerMap.get(owner);
+        if (aspect == null)
+            aspect = playerMap.get(null);
+
         aspect.flareEntityCount++;
         if (entity.lifespan > aspect.oldestFlareLifetime)
         {
             aspect.oldestFlareLifetime = entity.lifespan;
             aspect.oldestFlare = entity;
+        }
+    }
+
+    private static class TrackerInstance
+    {
+        private int flareEntityCount;
+        private int oldestFlareLifetime;
+        private FlareEntity oldestFlare;
+
+        private void reset()
+        {
+            flareEntityCount = 0;
+            oldestFlareLifetime = -1;
+            oldestFlare = null;
         }
     }
 }

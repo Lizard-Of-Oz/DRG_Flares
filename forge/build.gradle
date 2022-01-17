@@ -2,7 +2,7 @@ plugins {
     id "com.github.johnrengelman.shadow" version "5.0.0"
 }
 
-archivesBaseName = "${rootProject.archives_base_name}-1.16-forge"
+archivesBaseName = "${rootProject.archives_base_name}-${rootProject.base_mc_version}-forge"
 
 configurations {
     shadowCommon
@@ -24,9 +24,6 @@ minecraft {
 loom {
     mixinConfig "drg_flares.mixins.json"
 }
-repositories {
-    maven { url 'https://jitpack.io' }
-}
 
 dependencies {
     //Modding platform
@@ -34,7 +31,7 @@ dependencies {
     modImplementation("me.shedaniel.cloth:cloth-config-forge:${rootProject.cloth_config_version}")
 
     //Other mods we do integration with
-    compileOnly ('com.github.Lizard-Of-Oz.Inventorio:inventorio-1.16-forge:1.16-SNAPSHOT') { transitive = false }
+    compileOnly ("com.github.Lizard-Of-Oz.Inventorio:inventorio-${rootProject.base_mc_version}-forge:${rootProject.base_mc_version}-SNAPSHOT") { transitive = false }
 
     //Other modules of this project
     implementation(project(path: ":common")) {

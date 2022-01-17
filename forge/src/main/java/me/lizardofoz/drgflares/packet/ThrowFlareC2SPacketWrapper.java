@@ -16,7 +16,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.stat.Stats;
 import net.minecraftforge.fml.network.NetworkEvent;
-
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -53,14 +52,14 @@ public class ThrowFlareC2SPacketWrapper
 
             if (ServerSettings.CURRENT.regeneratingFlaresEnabled.value)
             {
-                DRGFlarePlayerAspect data = DRGFlarePlayerAspect.get(player);
-                if (data == null || !data.checkFlareToss(player) || DRGFlaresUtil.isRegenFlareOnCooldown(player) || player.isSpectator())
+                DRGFlarePlayerAspect playerAspect = DRGFlarePlayerAspect.get(player);
+                if (playerAspect == null || !playerAspect.checkFlareToss(player) || DRGFlaresUtil.isRegenFlareOnCooldown(player) || player.isSpectator())
                     return;
                 FlareEntity.throwFlare(player, color);
                 Map<FlareColor, Item> itemTypes = DRGFlareRegistry.getInstance().getFlareItemTypes();
                 player.getItemCooldownManager().set(itemTypes.get(FlareColor.RED), 5);
                 player.incrementStat(Stats.USED.getOrCreateStat(itemTypes.get(color)));
-                data.reduceFlareCount(player);
+                playerAspect.reduceFlareCount(player);
             }
             else
             {

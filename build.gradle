@@ -15,17 +15,21 @@ def version_replaces = [
         "fabric_loader_version": rootProject.fabric_loader_version,
         "minecraft_version": rootProject.minecraft_version,
         "forge_version": rootProject.forge_version,
+        "base_mc_version": rootProject.base_mc_version,
         "github": rootProject.github
 ]
 
 subprojects {
     apply plugin: "forgified-fabric-loom"
 
+    repositories {
+        maven { url "https://jitpack.io" }
+    }
+
     dependencies {
         minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
         mappings "net.fabricmc:yarn:${rootProject.yarn_mappings}:v2"
 
-        modImplementation("me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config_version}")
         compileOnly "org.projectlombok:lombok:${rootProject.lombok_version}"
         annotationProcessor "org.projectlombok:lombok:${rootProject.lombok_version}"
     }

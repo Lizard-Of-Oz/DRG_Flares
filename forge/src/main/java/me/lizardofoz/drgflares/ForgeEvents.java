@@ -23,7 +23,6 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
-
 import java.util.Collection;
 
 public class ForgeEvents
@@ -35,6 +34,8 @@ public class ForgeEvents
     @SubscribeEvent
     public void onEvent(FMLServerStartedEvent event)
     {
+        DRGFlareLimiter.clear();
+        DRGFlarePlayerAspect.clear();
         FlareLightBlock.refreshBlockStates();
         ServerSettings.CURRENT.loadFromJson(ServerSettings.LOCAL.asJson());
         if (!ServerSettings.CURRENT.flareRecipesInSurvival.value)
@@ -49,7 +50,8 @@ public class ForgeEvents
     public void onEvent(PlayerEvent.PlayerLoggedInEvent event)
     {
         ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
-        DRGFlarePlayerAspect.add(player);
+        DRGFlareLimiter.onPlayerJoin(player);
+        DRGFlarePlayerAspect.onPlayerJoin(player);
         DRGFlaresUtil.unlockFlareRecipes(player);
         PacketStuff.sendSettingsSyncPacket(player);
     }
@@ -57,7 +59,8 @@ public class ForgeEvents
     @SubscribeEvent
     public void onEvent(PlayerEvent.PlayerLoggedOutEvent event)
     {
-        DRGFlarePlayerAspect.remove(event.getPlayer());
+        DRGFlareLimiter.onPlayerLeave(event.getPlayer());
+        DRGFlarePlayerAspect.onPlayerLeave(event.getPlayer());
     }
 
     @SubscribeEvent

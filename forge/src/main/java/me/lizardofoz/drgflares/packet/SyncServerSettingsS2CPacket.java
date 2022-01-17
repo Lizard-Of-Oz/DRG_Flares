@@ -5,11 +5,8 @@ import com.google.gson.JsonObject;
 import me.lizardofoz.drgflares.block.FlareLightBlock;
 import me.lizardofoz.drgflares.config.ServerSettings;
 import me.lizardofoz.drgflares.util.DRGFlarePlayerAspect;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraftforge.fml.network.NetworkEvent;
-
 import java.util.function.Supplier;
 
 public class SyncServerSettingsS2CPacket
@@ -34,7 +31,6 @@ public class SyncServerSettingsS2CPacket
     }
 
     //Receiver's consumer
-    @Environment(EnvType.CLIENT)
     public void invokeOnClient(Supplier<NetworkEvent.Context> supplier)
     {
         supplier.get().enqueueWork(() -> {
