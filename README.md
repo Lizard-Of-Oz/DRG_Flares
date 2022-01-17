@@ -86,11 +86,7 @@ When you join a remote server featuring this mod, your settings will be synchron
 Tip: you can configure flares to "warm up", if `full_brightness_light_level` will be set lower, than `dimmed_light_level`.
 
 ## Use in modpacks and with other mods
-You can include this mod in a modpack as long as:
-
-A. Modpack is private
-
-B. Mod jar isn't embedded, but linked in the modpack manifest to be automatically downloaded by the client.
+You can include this mod in a modpack as long as your modpack is private OR the mod jar isn't embedded, but linked in the modpack manifest to be automatically downloaded by the client.
 
 If you want to use this mode as a dependency, I recommend using JitPack. **Don't embed this mod inside your mod.**
 Please note that me using Architectury plugin makes the gradle setup to be different that normal:
@@ -118,5 +114,6 @@ repositories {
 dependencies {
   ...
   compileOnly 'com.github.Lizard-Of-Oz.DRG_Flares:drg_flares-1.16-forge:1.16-SNAPSHOT'
+  //If you're using Architectury, you might need to use modCompileOnly instead of compileOnly
 }
 ```
