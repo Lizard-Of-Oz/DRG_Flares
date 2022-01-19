@@ -2,9 +2,10 @@ package me.lizardofoz.drgflares.packet;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import me.lizardofoz.drgflares.DRGFlareRegistry;
 import me.lizardofoz.drgflares.block.FlareLightBlock;
 import me.lizardofoz.drgflares.config.ServerSettings;
-import me.lizardofoz.drgflares.util.DRGFlarePlayerAspect;
+import me.lizardofoz.drgflares.util.ServerSyncMode;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -38,9 +39,9 @@ public class SyncServerSettingsS2CPacket
     public void invokeOnClient()
     {
         MinecraftClient.getInstance().execute(() -> {
+            DRGFlareRegistry.getInstance().serverSyncMode = ServerSyncMode.SYNC_WITH_SERVER;
             ServerSettings.CURRENT.loadFromJson(settings);
             FlareLightBlock.refreshBlockStates();
-            DRGFlarePlayerAspect.clientLocal.reset();
         });
     }
 }

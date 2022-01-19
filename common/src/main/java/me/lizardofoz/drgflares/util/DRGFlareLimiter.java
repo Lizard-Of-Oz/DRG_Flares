@@ -23,7 +23,7 @@ public class DRGFlareLimiter
 
     private DRGFlareLimiter() { }
 
-    public static void clear()
+    public static void initOrReset()
     {
         playerMap.clear();
         playerMap.put(null, new TrackerInstance());

@@ -130,6 +130,6 @@ public class DRGFlareRegistryForge extends DRGFlareRegistry
         SpawnFlareEntityS2CPacket packet = new SpawnFlareEntityS2CPacket(flareEntity);
         PacketByteBuf buf = new PacketByteBuf(PooledByteBufAllocator.DEFAULT.buffer());
         packet.write(buf);
-        return PacketStuff.sendFlareSpawnPacket(packet);
+        return PacketStuff.sendFlareSpawnS2CPacket(packet);
     }
 }
