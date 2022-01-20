@@ -1,11 +1,13 @@
 package me.lizardofoz.drgflares.client;
 
+import me.lizardofoz.drgflares.DRGFlareRegistry;
 import me.lizardofoz.drgflares.block.FlareLightBlock;
 import me.lizardofoz.drgflares.config.PlayerSettings;
 import me.lizardofoz.drgflares.config.ServerSettings;
 import me.lizardofoz.drgflares.config.SettingsEntry;
 import me.lizardofoz.drgflares.util.DRGFlaresUtil;
 import me.lizardofoz.drgflares.util.FlareColor;
+import me.lizardofoz.drgflares.util.ServerSyncMode;
 import me.shedaniel.clothconfig2.api.AbstractConfigListEntry;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
@@ -59,7 +61,12 @@ public class SettingsScreen
         addBoolEntry(category, entryBuilder, PlayerSettings.INSTANCE.flareButtonHint, true);
 
         boolean editable = !DRGFlaresUtil.isOnRemoteServer();
-        if (editable)
+        if (DRGFlareRegistry.getInstance().serverSyncMode == ServerSyncMode.CLIENT_ONLY)
+        {
+            editable = true;
+            category.addEntry(entryBuilder.startTextDescription(new TranslatableText("drg_flares.settings.server_desc_client_only")).build());
+        }
+        else if (editable)
             category.addEntry(entryBuilder.startTextDescription(new TranslatableText("drg_flares.settings.server_desc")).build());
         else
             category.addEntry(entryBuilder.startTextDescription(new TranslatableText("drg_flares.settings.disabled_by_server")).build());
@@ -179,7 +186,7 @@ public class SettingsScreen
     {
         PlayerSettings.INSTANCE.save();
 
-        if (!DRGFlaresUtil.isOnRemoteServer())
+        if (!DRGFlaresUtil.isOnRemoteServer() || DRGFlareRegistry.getInstance().serverSyncMode != ServerSyncMode.SYNC_WITH_SERVER)
         {
             ServerSettings.LOCAL.save();
             ServerSettings.CURRENT.loadFromJson(ServerSettings.LOCAL.asJson());

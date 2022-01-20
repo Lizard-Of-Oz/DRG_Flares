@@ -32,11 +32,12 @@
   "__comment3": "Settings Menu",
   "drg_flares.settings.title": "DRG Flares Settings",
   "drg_flares.settings.about.title": "§fAbout DRG Flares",
-  "drg_flares.settings.about.text": "§a§oDid I hear a Rock and Stone?§r\n \nThis mod introduces High-Intensity Flares from Deep Rock Galactic into Minecraft\n \nFlares are throwable temporary light sources which bounce off of surfaces\n \nAfter %d seconds, a flare will partially lose its brightness,\nand after additional %d seconds it will fizzle out completely\n \nFor the performance purposes, %d seconds later a fizzled out flare will despawn",
+  "drg_flares.settings.about.text": "§a§oDid I hear a Rock and Stone?§r\n \nThis mod introduces High-Intensity Flares from Deep Rock Galactic into Minecraft\n \nFlares are throwable temporary light sources which bounce off of surfaces\n \nAfter %d seconds, a flare will partially lose its brightness,\nand after additional %d seconds it will fizzle out completely\n \nFor the performance purposes, %d seconds later a fizzled out flare will despawn\n \nCan be used as a Client-Side-Only mod with flares visible only to you and not synced between players",
 
   "__comment4": "Server-Side Settings",
-  "drg_flares.settings.disabled_by_server": "§eYou've joined a server and its server-side settings are in effect.\nThe following settings are server-side and affect all players",
+  "drg_flares.settings.disabled_by_server": "§dYou've joined a server with DRG Flares mod installed\nand its server-side settings are in effect.\nThe following settings are server-side and affect all players",
   "drg_flares.settings.server_desc": "The following settings are server-side and affect all players",
+  "drg_flares.settings.server_desc_client_only": "§eYou're playing on a server without DRG Flares mod installed.\nFlares are visible only to you and aren't synced between players.\nSurvival Flares and Server-Side Light Sources are disabled",
 
   "drg_flares.settings.regenerating_flares_enabled": "Regenerating Flares",
   "drg_flares.settings.regenerating_flares_enabled.desc": "Flares regenerate over time and can\nbe thrown with a press of a button",

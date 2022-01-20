@@ -2,9 +2,10 @@ package me.lizardofoz.drgflares.packet;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import me.lizardofoz.drgflares.DRGFlareRegistry;
 import me.lizardofoz.drgflares.block.FlareLightBlock;
 import me.lizardofoz.drgflares.config.ServerSettings;
-import me.lizardofoz.drgflares.util.DRGFlarePlayerAspect;
+import me.lizardofoz.drgflares.util.ServerSyncMode;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraftforge.fmllegacy.network.NetworkEvent;
 import java.util.function.Supplier;
@@ -34,8 +35,8 @@ public class SyncServerSettingsS2CPacket
     public void invokeOnClient(Supplier<NetworkEvent.Context> supplier)
     {
         supplier.get().enqueueWork(() -> {
+            DRGFlareRegistry.getInstance().serverSyncMode = ServerSyncMode.SYNC_WITH_SERVER;
             ServerSettings.CURRENT.loadFromJson(settings);
-            DRGFlarePlayerAspect.clientLocal.reset();
             FlareLightBlock.refreshBlockStates();
         });
         supplier.get().setPacketHandled(true);

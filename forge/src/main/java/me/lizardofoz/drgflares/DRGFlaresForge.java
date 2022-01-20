@@ -9,7 +9,6 @@ import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.loading.FMLEnvironment;
@@ -24,7 +23,7 @@ public final class DRGFlaresForge extends DRGFlares
         DRGFlareRegistryForge.initialize();
         FlareDispenserBehavior.initialize();
         PacketStuff.initialize();
-        MinecraftForge.EVENT_BUS.register(new ForgeEvents());
+        ForgeEvents.initialize();
 
         if (FMLEnvironment.dist == Dist.CLIENT)
             Client.initialize();
@@ -36,6 +35,7 @@ public final class DRGFlaresForge extends DRGFlares
     {
         private static void initialize()
         {
+            ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.DISPLAYTEST, () -> Pair.of(() -> FMLNetworkConstants.IGNORESERVERONLY, (a, b) -> true));
             GameOptions options = MinecraftClient.getInstance().options;
             //Keybinds and integration with Forge's Built-in Mod Menu.
             KeyBinding[] keys = Arrays.copyOf(

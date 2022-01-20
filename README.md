@@ -6,7 +6,7 @@
 ## About
 _"Did I hear a Rock and Stone?"_
 
-This mod introduces High-Intensity Flares from Deep Rock Galactic into Minecraft in two modes.
+This mod introduces High-Intensity Flares from Deep Rock Galactic into Minecraft in several ways.
 
 Flares are throwable temporary light sources which bounce off of surfaces.
 
@@ -26,7 +26,17 @@ Enabled by default, but can be turned off in favor of (or ran simultaneously wit
 ### Survival Flares
 Disabled by default. If enabled, players will be able to craft and use flares as any other Minecraft item. Flares can also be shot from Dispensers.
 
-If Regenerating Flares are disabled, "Throw Flare" keybind will throw a Survival Flare item if available. If [Inventorio](https://github.com/Lizard-Of-Oz/Inventorio) mod is present, it will scan its additional slots as well. 
+If Regenerating Flares are disabled, "Throw Flare" keybind will throw a Survival Flare item if available. If [Inventorio](https://github.com/Lizard-Of-Oz/Inventorio) mod is present, it will scan its additional slots as well.
+
+## Client-Side-Only Mode
+
+Regenerating flares work even without the mod being installed on the server!
+
+In this case, nobody else will see your flares, even if they also have the mod installed. After all, flares don't actually exist in this mode and just faked on your side.   
+
+Survival Flares and Server-Side Light Sources also won't work unless installed on the server.
+
+**Warning!** As with most client-side mods, there's a chance to trigger anti-cheat systems installed on public servers. Use it at your own risk.
 
 ## Installation
 Grab the jar file from CurseForge: [Fabric Version](https://www.curseforge.com/minecraft/mc-mods/drg-flares) and [Forge Version](https://www.curseforge.com/minecraft/mc-mods/drg-flares-forge)

@@ -9,6 +9,7 @@ import me.lizardofoz.drgflares.config.ServerSettings;
 import me.lizardofoz.drgflares.util.DRGFlareLimiter;
 import me.lizardofoz.drgflares.util.DRGFlaresUtil;
 import me.lizardofoz.drgflares.util.FlareColor;
+import me.lizardofoz.drgflares.util.ServerSyncMode;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
@@ -58,6 +59,7 @@ public class FlareEntity extends ThrownEntity
     }
 
     //Note: we call this only on the server's side
+    //UPD: if this called on the client's side, we know it has to be in the client-side-only mode
     public static FlareEntity throwFlare(@NotNull LivingEntity owner, FlareColor color)
     {
         float throwAngle = ServerSettings.CURRENT.flareThrowAngle.value;
@@ -66,7 +68,17 @@ public class FlareEntity extends ThrownEntity
         FlareEntity flareEntity = new FlareEntity(owner, color);
         flareEntity.setPos(flareEntity.getX(), flareEntity.getY() - 0.5, flareEntity.getZ());
         flareEntity.setProperties(owner, owner.getPitch() - pitchModifier, owner.getYaw(), 0, 0.75f * ServerSettings.CURRENT.flareThrowSpeed.value, 1);
-        owner.world.spawnEntity(flareEntity);
+        if (!owner.world.isClient)
+            owner.world.spawnEntity(flareEntity);
+        else
+        {
+            //EntityId magic to avoid clashing with entityId-s of real entities
+            int randomNegativeId = flareEntity.getId() - 100000;
+            while (owner.world.getEntityById(randomNegativeId) != null)
+                randomNegativeId = owner.world.getRandom().nextInt(1000000) - 2000000;
+            flareEntity.setId(randomNegativeId);
+            DRGFlaresUtil.addEntityOnClient(owner.world, flareEntity);
+        }
         return flareEntity;
     }
 
@@ -183,7 +195,7 @@ public class FlareEntity extends ThrownEntity
         if (lifespan > ticksUntilDespawn * 20 || isInLava() || getY() <= DRGFlaresUtil.getVoidDamageLevel(world))
             kill();
 
-        if (!world.isClient)
+        if (!world.isClient || DRGFlareRegistry.getInstance().serverSyncMode == ServerSyncMode.CLIENT_ONLY)
             DRGFlareLimiter.reportFlare(this);
         else
             frame(0);

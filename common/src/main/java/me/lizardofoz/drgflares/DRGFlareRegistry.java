@@ -4,6 +4,7 @@ import lombok.Getter;
 import me.lizardofoz.drgflares.block.FlareLightBlockEntity;
 import me.lizardofoz.drgflares.entity.FlareEntity;
 import me.lizardofoz.drgflares.util.FlareColor;
+import me.lizardofoz.drgflares.util.ServerSyncMode;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.EntityType;
@@ -33,4 +34,5 @@ public abstract class DRGFlareRegistry
     public abstract Packet<?> createSpawnFlareEntityPacket(FlareEntity flareEntity);
     public abstract boolean isClothConfigLoaded();
     public abstract boolean isInventorioLoaded();
+    public ServerSyncMode serverSyncMode = ServerSyncMode.UNDEFINED;
 }
