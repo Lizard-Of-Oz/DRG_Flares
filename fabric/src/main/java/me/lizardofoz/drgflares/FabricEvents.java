@@ -96,7 +96,7 @@ public class FabricEvents
             HudRenderCallback.EVENT.register(FlareHUDRenderer::render);
 
             //Flare Entity Renderer
-            EntityRendererRegistry.INSTANCE.register(DRGFlareRegistryFabric.getInstance().getFlareEntityType(), (dispatcher, context) -> new FlareEntityRenderer(dispatcher));
+            EntityRendererRegistry.INSTANCE.register(DRGFlareRegistryFabric.getInstance().getFlareEntityType(), FlareEntityRenderer::new);
 
             //Client-Side Tick
             ClientTickEvents.START_CLIENT_TICK.register(client -> {
@@ -105,7 +105,7 @@ public class FabricEvents
                     return;
                 DRGFlarePlayerAspect.clientLocal.tick();
                 if (DRGFlareRegistryFabric.getInstance().isClothConfigLoaded() && PlayerSettings.INSTANCE.flareModSettingsKey.wasPressed())
-                    client.openScreen(SettingsScreen.create(client.currentScreen));
+                    client.setScreen(SettingsScreen.create(client.currentScreen));
 
                 if (PlayerSettings.INSTANCE.throwFlareKey.wasPressed() && !DRGFlaresUtil.isRegenFlareOnCooldown(player))
                 {

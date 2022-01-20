@@ -11,10 +11,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.VertexFormats;
+import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
@@ -41,7 +38,7 @@ public class FlareHUDRenderer
         BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
 
         //Frame
-        client.getTextureManager().bindTexture(HUD_TEXTURE);
+        RenderSystem.setShaderTexture(0, HUD_TEXTURE);
         RenderSystem.enableBlend();
         DrawableHelper.drawTexture(matrixStack, widgetX - 3, widgetY - 3, -200, 0, 0, 22, 22, 32, 32);  //Frame
         if (shouldRenderKeybindHint)
@@ -49,7 +46,7 @@ public class FlareHUDRenderer
 
         float zOffset = client.getItemRenderer().zOffset;
         client.getItemRenderer().zOffset = -170;
-        client.getItemRenderer().renderInGuiWithOverrides(client.player, flareDisplayStack, widgetX, widgetY);
+        client.getItemRenderer().renderInGuiWithOverrides(flareDisplayStack, widgetX, widgetY);
         client.getItemRenderer().zOffset = zOffset;
 
         if (!DRGFlaresUtil.hasUnlimitedRegeneratingFlares(client.player))
@@ -91,7 +88,7 @@ public class FlareHUDRenderer
 
     private static void renderGuiQuad(BufferBuilder buffer, int x, int y, int width, int height, int z, int red, int green, int blue)
     {
-        buffer.begin(7, VertexFormats.POSITION_COLOR);
+        buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
         buffer.vertex(x, y, z).color(red, green, blue, 255).next();
         buffer.vertex(x, y + height, z).color(red, green, blue, 255).next();
         buffer.vertex(x + width, y + height, z).color(red, green, blue, 255).next();

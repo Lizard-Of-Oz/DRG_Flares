@@ -5,7 +5,6 @@ import io.netty.buffer.PooledByteBufAllocator;
 import lombok.Getter;
 import me.lizardofoz.drgflares.block.FlareLightBlock;
 import me.lizardofoz.drgflares.block.FlareLightBlockEntity;
-import me.lizardofoz.drgflares.client.FlareEntityRenderer;
 import me.lizardofoz.drgflares.entity.FlareEntity;
 import me.lizardofoz.drgflares.item.FlareItem;
 import me.lizardofoz.drgflares.packet.PacketStuff;
@@ -13,8 +12,8 @@ import me.lizardofoz.drgflares.packet.SpawnFlareEntityS2CPacket;
 import me.lizardofoz.drgflares.util.FlareColor;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.MapColor;
 import net.minecraft.block.Material;
-import net.minecraft.block.MaterialColor;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
@@ -24,14 +23,10 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundEvent;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,7 +36,7 @@ public class DRGFlareRegistryForge extends DRGFlareRegistry
     private final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, "drg_flares");
     private final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, "drg_flares");
     private final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, "drg_flares");
-    private final DeferredRegister<BlockEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, "drg_flares");
+    private final DeferredRegister<BlockEntityType<?>> TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, "drg_flares");
 
     @Getter private EntityType<FlareEntity> flareEntityType;
     @Getter private Map<FlareColor, Item> flareItemTypes;
@@ -93,16 +88,13 @@ public class DRGFlareRegistryForge extends DRGFlareRegistry
                 .trackingTickInterval(1)
                 .build("drg_flares:drg_flare");
         ENTITIES.register("drg_flare", () -> flareEntityType);
-
-        if (FMLEnvironment.dist == Dist.CLIENT)
-            RenderingRegistry.registerEntityRenderingHandler(flareEntityType, FlareEntityRenderer::new);
     }
 
     private void registerLightBlock()
     {
         lightSourceBlockType = new FlareLightBlock(
                 AbstractBlock.Settings.of(
-                        new Material.Builder(MaterialColor.CLEAR)
+                        new Material.Builder(MapColor.CLEAR)
                                 .replaceable()
                                 .notSolid()
                                 .build())

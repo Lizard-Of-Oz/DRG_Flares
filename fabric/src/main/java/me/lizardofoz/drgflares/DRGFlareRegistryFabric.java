@@ -12,11 +12,12 @@ import me.lizardofoz.drgflares.util.FlareColor;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricMaterialBuilder;
+import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
-import net.minecraft.block.MaterialColor;
+import net.minecraft.block.MapColor;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
@@ -72,7 +73,7 @@ public class DRGFlareRegistryFabric extends DRGFlareRegistry
     {
         lightSourceBlockType = new FlareLightBlock(
                 AbstractBlock.Settings.of(
-                        new FabricMaterialBuilder(MaterialColor.CLEAR)
+                        new FabricMaterialBuilder(MapColor.CLEAR)
                                 .replaceable()
                                 .lightPassesThrough()
                                 .notSolid()
@@ -82,7 +83,7 @@ public class DRGFlareRegistryFabric extends DRGFlareRegistry
                         .dropsNothing()
                         .nonOpaque()
                         .luminance((state) -> state.get(FlareLightBlock.LIGHT_LEVEL)));
-        lightSourceBlockEntityType = BlockEntityType.Builder.create(FlareLightBlockEntity::new, lightSourceBlockType).build(null);
+        lightSourceBlockEntityType = FabricBlockEntityTypeBuilder.create(FlareLightBlockEntity::new, lightSourceBlockType).build(null);
 
         Registry.register(Registry.BLOCK, new Identifier("drg_flares", "flare_light_block"), lightSourceBlockType);
         Registry.register(Registry.BLOCK_ENTITY_TYPE, new Identifier("drg_flares", "flare_light_block_entity"), lightSourceBlockEntityType);

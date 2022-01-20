@@ -22,7 +22,7 @@ public class FlareItem extends Item
         ItemStack itemStack = player.getStackInHand(hand);
         if (!world.isClient)
             FlareEntity.throwFlare(player, DRGFlaresUtil.getFlareColorFromItem(itemStack));
-        if (!player.abilities.creativeMode)
+        if (!player.getAbilities().creativeMode)
             itemStack.decrement(1);
         player.getItemCooldownManager().set(this, 5);
         player.incrementStat(Stats.USED.getOrCreateStat(this));

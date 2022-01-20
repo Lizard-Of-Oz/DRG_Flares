@@ -15,7 +15,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.stat.Stats;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -64,7 +64,7 @@ public class ThrowFlareC2SPacketWrapper
             else
             {
                 //Here we exploit the fact, that when any tryFlare returns true, the subsequent tryFlare~s never get called
-                if (tryFlare(player, player.inventory.offHand) || tryFlare(player, player.inventory.main))
+                if (tryFlare(player, player.getInventory().offHand) || tryFlare(player, player.getInventory().main))
                     return;
                 if (DRGFlareRegistryForge.getInstance().isInventorioLoaded())
                 {
@@ -93,7 +93,7 @@ public class ThrowFlareC2SPacketWrapper
                     return true;
                 FlareEntity.throwFlare(player, DRGFlaresUtil.getFlareColorFromItem(itemStack));
                 player.incrementStat(Stats.USED.getOrCreateStat(item));
-                if (!player.abilities.creativeMode)
+                if (!player.getAbilities().creativeMode)
                     itemStack.decrement(1);
                 player.getItemCooldownManager().set(item, 5);
                 return true;

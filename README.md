@@ -1,7 +1,7 @@
 # DRG Flares (Forge / Fabric)
 
 ## Showcase Video
-[![Video Demonstration](https://user-images.githubusercontent.com/701551/149639221-0ee53d9a-74e5-42c5-8e6a-e6b9b04e59ec.png)](https://youtu.be/IlnwIly0Qh0)
+[![Video Demonstration](https://user-images.githubusercontent.com/701551/149723954-4e4b0d37-10c3-4a06-90c8-85882124f1b9.png)](https://youtu.be/IlnwIly0Qh0)
 
 ## About
 _"Did I hear a Rock and Stone?"_
@@ -86,11 +86,7 @@ When you join a remote server featuring this mod, your settings will be synchron
 Tip: you can configure flares to "warm up", if `full_brightness_light_level` will be set lower, than `dimmed_light_level`.
 
 ## Use in modpacks and with other mods
-You can include this mod in a modpack as long as:
-
-A. Modpack is private
-
-B. Mod jar isn't embedded, but linked in the modpack manifest to be automatically downloaded by the client.
+You can include this mod in a modpack as long as your modpack is private OR the mod jar isn't embedded, but linked in the modpack manifest to be automatically downloaded by the client.
 
 If you want to use this mode as a dependency, I recommend using JitPack. **Don't embed this mod inside your mod.**
 Please note that me using Architectury plugin makes the gradle setup to be different that normal:
@@ -104,7 +100,7 @@ repositories {
 
 dependencies {
   ...
-  modCompileOnly 'com.github.Lizard-Of-Oz.DRG_Flares:drg_flares-1.16-fabric:1.16-SNAPSHOT'
+  modCompileOnly 'com.github.Lizard-Of-Oz.DRG_Flares:drg_flares-1.17-fabric:1.17-SNAPSHOT'
 }
 ```
 
@@ -117,6 +113,7 @@ repositories {
 
 dependencies {
   ...
-  compileOnly 'com.github.Lizard-Of-Oz.DRG_Flares:drg_flares-1.16-forge:1.16-SNAPSHOT'
+  compileOnly 'com.github.Lizard-Of-Oz.DRG_Flares:drg_flares-1.17-forge:1.17-SNAPSHOT'
+  //If you're using Architectury, you might need to use modCompileOnly instead of compileOnly
 }
 ```

@@ -1,5 +1,5 @@
 plugins {
-    id "com.github.johnrengelman.shadow" version "5.0.0"
+    id "com.github.johnrengelman.shadow" version "7.0.0"
 }
 
 archivesBaseName = "${rootProject.archives_base_name}-${rootProject.base_mc_version}-fabric"
@@ -27,14 +27,11 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 
     //Other mods we do integration with
-    modCompileOnly "io.github.prospector:modmenu:${project.modmenu_version}"
+    modCompileOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
     modCompileOnly ("com.github.Lizard-Of-Oz.Inventorio:inventorio-${rootProject.base_mc_version}-fabric:${rootProject.base_mc_version}-SNAPSHOT") { transitive = false }
 
     //"Common" package
-    implementation(project(path: ":common")) {
-        transitive = false
-    }
-    developmentFabric(project(path: ":common")) {
+    common(project(path: ":common", configuration: "namedElements")) {
         transitive = false
     }
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) {

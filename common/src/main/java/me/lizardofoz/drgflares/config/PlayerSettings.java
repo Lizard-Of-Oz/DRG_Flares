@@ -4,10 +4,9 @@ import com.google.common.collect.ImmutableList;
 import me.lizardofoz.drgflares.util.FlareColor;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.options.KeyBinding;
+import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
-
 import java.io.File;
 import java.util.List;
 

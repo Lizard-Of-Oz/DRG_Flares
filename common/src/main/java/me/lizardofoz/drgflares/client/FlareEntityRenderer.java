@@ -4,16 +4,15 @@ import me.lizardofoz.drgflares.entity.FlareEntity;
 import me.lizardofoz.drgflares.util.FlareColor;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.model.ModelPart;
+import net.minecraft.client.model.*;
 import net.minecraft.client.render.*;
-import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.render.entity.EntityRenderer;
+import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.client.util.math.Vector3f;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-
+import net.minecraft.util.math.Vec3f;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,15 +25,25 @@ public class FlareEntityRenderer extends EntityRenderer<FlareEntity>
     private final ModelPart rodModel;
     private final ModelPart metalModel;
 
-    public FlareEntityRenderer(EntityRenderDispatcher dispatcher)
+    public FlareEntityRenderer(EntityRendererFactory.Context context)
     {
-        super(dispatcher);
+        super(context);
 
         //There reason to have 2 models is because the rod itself remains glowing in dark
-        rodModel = new ModelPart(32, 32, 0, 0).setTextureOffset(0, 12).addCuboid(-1, -9, -1, 2, 13, 2);
-        metalModel = new ModelPart(32, 32, 0, 0)
-                .setTextureOffset(0, 6).addCuboid(-2, -8, -2, 4, 2, 4)  //bottom part
-                .setTextureOffset(0, 0).addCuboid(-2, 1, -2, 4, 2, 4);  //top part
+        rodModel = new ModelData().getRoot()
+                .addChild("rod", ModelPartBuilder.create()
+                        .uv(0, 12)
+                        .cuboid(-1, -9, -1, 2, 13, 2), ModelTransform.NONE)
+                .createPart(32, 32);
+
+        ModelPartData metalModelBuilder = new ModelData().getRoot();
+        metalModelBuilder.addChild("bottom", ModelPartBuilder.create()
+                .uv(0, 6)
+                .cuboid(-2, -8, -2, 4, 2, 4), ModelTransform.NONE);
+        metalModelBuilder.addChild("top", ModelPartBuilder.create()
+                .uv(0, 0)
+                .cuboid(-2, 1, -2, 4, 2, 4), ModelTransform.NONE);
+        metalModel = metalModelBuilder.createPart(32, 32);
 
         for (FlareColor color : FlareColor.colors)
             TEXTURES.put(color, new Identifier("drg_flares", "textures/entity/drg_flare_" + color.toString() + ".png"));
@@ -52,10 +61,10 @@ public class FlareEntityRenderer extends EntityRenderer<FlareEntity>
         matrices.translate(0, 0.1f, 0);
         //Here's a trick - we want each flare to end up with a different rotation when laying on the floor.
         //We could use random.setSeed(entId), but this works as good as that, but much faster
-        matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(entity.getEntityId() * 119));
-        matrices.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(entity.rotation));
-        matrices.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(MathHelper.sin((float) (velocity.x + 90) / 15) * 360));
-        matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(MathHelper.cos((float) (velocity.y + velocity.x * 200) / 15) * 360));
+        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(entity.getId() * 119));
+        matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(entity.rotation));
+        matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(MathHelper.sin((float) (velocity.x + 90) / 15) * 360));
+        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(MathHelper.cos((float) (velocity.y + velocity.x * 200) / 15) * 360));
         matrices.scale(0.6f, 0.6f, 0.6f);
 
         VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RenderLayer.getEntityCutout(TEXTURES.get(entity.color)));

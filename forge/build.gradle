@@ -1,16 +1,20 @@
 plugins {
-    id "com.github.johnrengelman.shadow" version "5.0.0"
+    id "com.github.johnrengelman.shadow" version "7.0.0"
 }
 
 archivesBaseName = "${rootProject.archives_base_name}-${rootProject.base_mc_version}-forge"
 
-configurations {
-    shadowCommon
-}
-
 architectury {
     platformSetupLoomIde()
     forge()
+}
+
+configurations {
+    common
+    shadowCommon
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentFabric.extendsFrom common
 }
 
 minecraft {
@@ -22,7 +26,9 @@ minecraft {
 }
 
 loom {
-    mixinConfig "drg_flares.mixins.json"
+    forge {
+        mixinConfig "drg_flares.mixins.json"
+    }
 }
 
 dependencies {
@@ -31,13 +37,10 @@ dependencies {
     modImplementation("me.shedaniel.cloth:cloth-config-forge:${rootProject.cloth_config_version}")
 
     //Other mods we do integration with
-    compileOnly ("com.github.Lizard-Of-Oz.Inventorio:inventorio-${rootProject.base_mc_version}-forge:${rootProject.base_mc_version}-SNAPSHOT") { transitive = false }
+    modCompileOnly ("com.github.Lizard-Of-Oz.Inventorio:inventorio-${rootProject.base_mc_version}-forge:${rootProject.base_mc_version}-SNAPSHOT") { transitive = false }
 
     //Other modules of this project
-    implementation(project(path: ":common")) {
-        transitive = false
-    }
-    developmentForge(project(path: ":common")) {
+    common(project(path: ":common", configuration: "namedElements")) {
         transitive = false
     }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) {

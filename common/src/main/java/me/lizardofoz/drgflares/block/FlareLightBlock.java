@@ -5,6 +5,8 @@ import me.lizardofoz.drgflares.DRGFlareRegistry;
 import me.lizardofoz.drgflares.config.ServerSettings;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
@@ -13,9 +15,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
+import net.minecraft.world.World;
 
 @SuppressWarnings("deprecation")
-public class FlareLightBlock extends Block implements BlockEntityProvider
+public class FlareLightBlock extends BlockWithEntity
 {
     public static final IntProperty LIGHT_LEVEL = Properties.LEVEL_15;
 
@@ -35,9 +38,9 @@ public class FlareLightBlock extends Block implements BlockEntityProvider
     }
 
     @Override
-    public BlockEntity createBlockEntity(BlockView world)
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
-        return new FlareLightBlockEntity();
+        return new FlareLightBlockEntity(pos, state);
     }
 
     @Override
@@ -74,5 +77,13 @@ public class FlareLightBlock extends Block implements BlockEntityProvider
     public PistonBehavior getPistonBehavior(BlockState state)
     {
         return PistonBehavior.DESTROY;
+    }
+
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
+    {
+        return world.isClient || ServerSettings.CURRENT.serverSideLightSources.value
+                ? checkType(type, DRGFlareRegistry.getInstance().getLightSourceBlockEntityType(), FlareLightBlockEntity::staticTick)
+                : null;
     }
 }

@@ -1,6 +1,7 @@
 package me.lizardofoz.drgflares;
 
 import me.lizardofoz.drgflares.block.FlareLightBlock;
+import me.lizardofoz.drgflares.client.FlareEntityRenderer;
 import me.lizardofoz.drgflares.client.FlareHUDRenderer;
 import me.lizardofoz.drgflares.client.SettingsScreen;
 import me.lizardofoz.drgflares.config.PlayerSettings;
@@ -18,11 +19,12 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
+import net.minecraftforge.fmlserverevents.FMLServerStartedEvent;
 import java.util.Collection;
 
 public class ForgeEvents
@@ -74,8 +76,15 @@ public class ForgeEvents
     @OnlyIn(Dist.CLIENT)
     public void onEvent(RenderGameOverlayEvent.Post event)
     {
-        if (event.getType() == RenderGameOverlayEvent.ElementType.HOTBAR)
+        if (event.getType() == RenderGameOverlayEvent.ElementType.ALL)
             FlareHUDRenderer.render(event.getMatrixStack(), event.getPartialTicks());
+    }
+
+    @SubscribeEvent
+    @OnlyIn(Dist.CLIENT)
+    public void onEvent(EntityRenderersEvent.RegisterRenderers event)
+    {
+        event.registerEntityRenderer(DRGFlareRegistryForge.instance.getFlareEntityType(), FlareEntityRenderer::new);
     }
 
     @SubscribeEvent
@@ -88,7 +97,7 @@ public class ForgeEvents
 
         DRGFlarePlayerAspect.clientLocal.tick();
         if (DRGFlareRegistryForge.getInstance().isClothConfigLoaded() && PlayerSettings.INSTANCE.flareModSettingsKey.wasPressed())
-            MinecraftClient.getInstance().openScreen(SettingsScreen.create(MinecraftClient.getInstance().currentScreen));
+            MinecraftClient.getInstance().setScreen(SettingsScreen.create(MinecraftClient.getInstance().currentScreen));
 
         if (PlayerSettings.INSTANCE.throwFlareKey.wasPressed() && !DRGFlaresUtil.isRegenFlareOnCooldown(player))
         {

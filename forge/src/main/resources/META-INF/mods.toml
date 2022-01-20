@@ -15,7 +15,7 @@ displayURL="${github}"
 [[dependencies.drg_flares]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.16.2,)"
+versionRange = "[${base_mc_version},)"
 ordering = "NONE"
 side = "BOTH"
 

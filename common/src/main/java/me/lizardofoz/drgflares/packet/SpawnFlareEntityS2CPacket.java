@@ -51,7 +51,7 @@ public class SpawnFlareEntityS2CPacket
 
     public SpawnFlareEntityS2CPacket(FlareEntity entity)
     {
-        this(entity.getEntityId(), entity.getUuid(), entity.getX(), entity.getY(), entity.getZ(), entity.getVelocity(), entity.lifespan, entity.color, entity.bounceCount);
+        this(entity.getId(), entity.getUuid(), entity.getX(), entity.getY(), entity.getZ(), entity.getVelocity(), entity.lifespan, entity.color, entity.bounceCount);
     }
 
     /** Please make sure you're calling it from the main thread */
@@ -65,7 +65,7 @@ public class SpawnFlareEntityS2CPacket
 
         entity.updateTrackedPosition(x, y, z);
         entity.refreshPositionAfterTeleport(x, y, z);
-        entity.setEntityId(id);
+        entity.setId(id);
         entity.setUuid(uuid);
         entity.lifespan = lifespan;
         entity.color = color;

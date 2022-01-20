@@ -17,7 +17,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.thrown.ThrownEntity;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.hit.BlockHitResult;
@@ -61,11 +61,11 @@ public class FlareEntity extends ThrownEntity
     public static FlareEntity throwFlare(@NotNull LivingEntity owner, FlareColor color)
     {
         float throwAngle = ServerSettings.CURRENT.flareThrowAngle.value;
-        float pitchModifier = Math.min(throwAngle, Math.max(0, owner.pitch + (95 - throwAngle)));
+        float pitchModifier = Math.min(throwAngle, Math.max(0, owner.getPitch() + (95 - throwAngle)));
 
         FlareEntity flareEntity = new FlareEntity(owner, color);
         flareEntity.setPos(flareEntity.getX(), flareEntity.getY() - 0.5, flareEntity.getZ());
-        flareEntity.setProperties(owner, owner.pitch - pitchModifier, owner.yaw, 0, 0.75f * ServerSettings.CURRENT.flareThrowSpeed.value, 1);
+        flareEntity.setProperties(owner, owner.getPitch() - pitchModifier, owner.getYaw(), 0, 0.75f * ServerSettings.CURRENT.flareThrowSpeed.value, 1);
         owner.world.spawnEntity(flareEntity);
         return flareEntity;
     }
@@ -81,17 +81,18 @@ public class FlareEntity extends ThrownEntity
     }
 
     @Override
-    protected void writeCustomDataToTag(CompoundTag tag)
+    public NbtCompound writeNbt(NbtCompound tag)
     {
-        super.writeCustomDataToTag(tag);
+        super.writeNbt(tag);
         tag.putInt("lifespan", lifespan);
         tag.putShort("color", (short) color.id);
+        return tag;
     }
 
     @Override
-    protected void readCustomDataFromTag(CompoundTag tag)
+    public void readNbt(NbtCompound tag)
     {
-        super.readCustomDataFromTag(tag);
+        super.readNbt(tag);
         lifespan = tag.getInt("lifespan");
         color = FlareColor.byId(tag.getShort("color"));
     }

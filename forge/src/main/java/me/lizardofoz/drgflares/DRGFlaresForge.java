@@ -5,15 +5,15 @@ import me.lizardofoz.drgflares.config.PlayerSettings;
 import me.lizardofoz.drgflares.item.FlareDispenserBehavior;
 import me.lizardofoz.drgflares.packet.PacketStuff;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.options.GameOptions;
-import net.minecraft.client.options.KeyBinding;
+import net.minecraft.client.option.GameOptions;
+import net.minecraft.client.option.KeyBinding;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.ExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.minecraftforge.fmlclient.ConfigGuiHandler;
 import java.util.Arrays;
 
 @Mod("drg_flares")
@@ -44,7 +44,7 @@ public final class DRGFlaresForge extends DRGFlares
             keys[keys.length - 1] = PlayerSettings.INSTANCE.throwFlareKey;
             if (DRGFlareRegistryForge.getInstance().isClothConfigLoaded())
             {
-                ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.CONFIGGUIFACTORY, () -> (client, parent) -> SettingsScreen.create(parent));
+                ModLoadingContext.get().registerExtensionPoint(ConfigGuiHandler.ConfigGuiFactory.class, () -> new ConfigGuiHandler.ConfigGuiFactory((client, parent) -> SettingsScreen.create(parent)));
                 keys[keys.length - 2] = PlayerSettings.INSTANCE.flareModSettingsKey;
             }
             options.keysAll = keys;

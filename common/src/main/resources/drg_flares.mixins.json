@@ -1,11 +1,11 @@
 {
-  "required": true,
+  "required": false,
   "package": "me.lizardofoz.drgflares.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "RecipeManagerAccessor"
   ],
   "injectors": {
-    "defaultRequire": 1
+    "defaultRequire": 0
   }
 }

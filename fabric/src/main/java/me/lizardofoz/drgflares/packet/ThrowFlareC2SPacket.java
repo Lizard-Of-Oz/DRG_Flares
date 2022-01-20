@@ -63,7 +63,7 @@ public class ThrowFlareC2SPacket
             else
             {
                 //Here we exploit the fact, that when any tryFlare returns true, the subsequent tryFlare~s never get called
-                if (tryFlare(player, player.inventory.offHand) || tryFlare(player, player.inventory.main))
+                if (tryFlare(player, player.getInventory().offHand) || tryFlare(player, player.getInventory().main))
                     return;
                 if (DRGFlareRegistryFabric.getInstance().isInventorioLoaded())
                 {
@@ -91,7 +91,7 @@ public class ThrowFlareC2SPacket
                     return true;
                 FlareEntity.throwFlare(player, DRGFlaresUtil.getFlareColorFromItem(itemStack));
                 player.incrementStat(Stats.USED.getOrCreateStat(item));
-                if (!player.abilities.creativeMode)
+                if (!player.getAbilities().creativeMode)
                     itemStack.decrement(1);
                 player.getItemCooldownManager().set(item, 5);
                 return true;

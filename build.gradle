@@ -1,6 +1,6 @@
 plugins {
-    id "architectury-plugin" version "3.1.105"
-    id "forgified-fabric-loom" version "0.6.96" apply false
+    id "architectury-plugin" version "3.4.126"
+    id "dev.architectury.loom" version "0.10.0.205" apply false
 }
 
 architectury {
@@ -20,7 +20,7 @@ def version_replaces = [
 ]
 
 subprojects {
-    apply plugin: "forgified-fabric-loom"
+    apply plugin: "dev.architectury.loom"
 
     repositories {
         maven { url "https://jitpack.io" }
@@ -29,6 +29,8 @@ subprojects {
     dependencies {
         minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
         mappings "net.fabricmc:yarn:${rootProject.yarn_mappings}:v2"
+
+        modImplementation("me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config_version}")
 
         compileOnly "org.projectlombok:lombok:${rootProject.lombok_version}"
         annotationProcessor "org.projectlombok:lombok:${rootProject.lombok_version}"
@@ -52,13 +54,12 @@ allprojects {
     archivesBaseName = rootProject.archives_base_name
     version = rootProject.mod_version
 
+    sourceCompatibility = JavaVersion.VERSION_16
+    targetCompatibility = JavaVersion.VERSION_16
+
     tasks.withType(JavaCompile) {
         options.encoding = "UTF-8"
-
-        def targetVersion = 8
-        if (JavaVersion.current().isJava9Compatible()) {
-            options.release.set(targetVersion)
-        }
+        options.release.set(16)
     }
 
     java {

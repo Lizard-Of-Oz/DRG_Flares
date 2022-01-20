@@ -79,7 +79,7 @@ public class DRGFlaresUtil
 
     public static boolean hasUnlimitedRegeneratingFlares(PlayerEntity player)
     {
-        return (player.abilities.creativeMode && ServerSettings.CURRENT.creativeUnlimitedRegeneratingFlares.value) || ServerSettings.CURRENT.unlimitedSurvivalFlares();
+        return (player.getAbilities().creativeMode && ServerSettings.CURRENT.creativeUnlimitedRegeneratingFlares.value) || ServerSettings.CURRENT.unlimitedSurvivalFlares();
     }
 
     public static boolean isRegenFlareOnCooldown(PlayerEntity player)
