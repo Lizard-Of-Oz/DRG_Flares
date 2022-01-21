@@ -91,7 +91,8 @@ public class SettingsScreen
 
         addIntegerEntry(category, entryBuilder, serverSettings.secondsUntilIdlingFlareGetsOptimized, editable);
         addIntegerEntry(category, entryBuilder, serverSettings.lightSourceLifespanTicks, editable);
-        addFloatEntry(category, entryBuilder, serverSettings.lightSourceRefreshDistance, editable);
+        addIntegerEntry(category, entryBuilder, serverSettings.lightSourceRefreshDistance, editable);
+        addIntegerEntry(category, entryBuilder, serverSettings.lightSourceSearchDistance, editable);
         addBoolEntry(category, entryBuilder, serverSettings.creativeUnlimitedRegeneratingFlares, editable);
         addBoolEntry(category, entryBuilder, serverSettings.serverSideLightSources, editable);
         category.addEntry(entryBuilder.startTextDescription(new LiteralText(" ")).build());
@@ -191,6 +192,7 @@ public class SettingsScreen
             ServerSettings.LOCAL.save();
             ServerSettings.CURRENT.loadFromJson(ServerSettings.LOCAL.asJson());
             FlareLightBlock.refreshBlockStates();
+            DRGFlareRegistry.getInstance().broadcastSettingsChange();
         }
     }
 }

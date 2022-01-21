@@ -9,7 +9,7 @@ import me.lizardofoz.inventorio.api.InventorioAPI;
 import me.lizardofoz.inventorio.player.PlayerInventoryAddon;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 import java.util.function.Supplier;
 
 public class ThrowFlareC2SPacketWrapper
@@ -51,7 +51,7 @@ public class ThrowFlareC2SPacketWrapper
             else
             {
                 //Here we exploit the fact, that when any tryFlare returns true, the subsequent tryFlare~s never get called
-                if (DRGFlaresUtil.tryFlare(player, player.inventory.offHand) || DRGFlaresUtil.tryFlare(player, player.inventory.main))
+                if (DRGFlaresUtil.tryFlare(player, player.getInventory().offHand) || DRGFlaresUtil.tryFlare(player, player.getInventory().main))
                     return;
                 if (DRGFlareRegistry.getInstance().isInventorioLoaded())
                 {

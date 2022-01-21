@@ -39,7 +39,7 @@ dependencies {
     //Other mods we do integration with
     modCompileOnly ("com.github.Lizard-Of-Oz.Inventorio:inventorio-${rootProject.base_mc_version}-forge:${rootProject.base_mc_version}-SNAPSHOT") { transitive = false }
 
-    //Other modules of this project
+    //"Common" package
     common(project(path: ":common", configuration: "namedElements")) {
         transitive = false
     }

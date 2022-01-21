@@ -64,13 +64,13 @@ public abstract class CommonEvents
         protected void onClientTick(MinecraftClient client)
         {
             ClientPlayerEntity player = client.player;
-            if (player == null)
+            if (player == null || client.isPaused())
                 return;
             DRGFlareLimiter.tick();
             DRGFlarePlayerAspect.clientLocal.tick();
 
             if (DRGFlareRegistry.getInstance().isClothConfigLoaded() && PlayerSettings.INSTANCE.flareModSettingsKey.wasPressed())
-                client.openScreen(SettingsScreen.create(client.currentScreen));
+                client.setScreen(SettingsScreen.create(client.currentScreen));
 
             if (PlayerSettings.INSTANCE.throwFlareKey.wasPressed() && !DRGFlaresUtil.isRegenFlareOnCooldown(player))
             {

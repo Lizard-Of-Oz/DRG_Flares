@@ -50,7 +50,7 @@ public class ThrowFlareC2SPacket
             else
             {
                 //Here we exploit the fact, that when any tryFlare returns true, the subsequent tryFlare~s never get called
-                if (DRGFlaresUtil.tryFlare(player, player.inventory.offHand) || DRGFlaresUtil.tryFlare(player, player.inventory.main))
+                if (DRGFlaresUtil.tryFlare(player, player.getInventory().offHand) || DRGFlaresUtil.tryFlare(player, player.getInventory().main))
                     return;
                 if (DRGFlareRegistry.getInstance().isInventorioLoaded())
                 {

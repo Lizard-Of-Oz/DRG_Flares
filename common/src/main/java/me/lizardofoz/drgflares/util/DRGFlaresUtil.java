@@ -114,7 +114,7 @@ public class DRGFlaresUtil
                 if (player.getItemCooldownManager().isCoolingDown(item))
                     return true;
                 FlareEntity.throwFlare(player, DRGFlaresUtil.getFlareColorFromItem(itemStack));
-                if (!player.abilities.creativeMode)
+                if (!player.getAbilities().creativeMode)
                     itemStack.decrement(1);
                 player.getItemCooldownManager().set(item, 5);
                 player.incrementStat(Stats.USED.getOrCreateStat(item));
@@ -134,6 +134,6 @@ public class DRGFlaresUtil
     @Environment(EnvType.CLIENT)
     public static void addEntityOnClient(World world, Entity entity)
     {
-        ((ClientWorld) world).addEntity(entity.getEntityId(), entity);
+        ((ClientWorld) world).addEntity(entity.getId(), entity);
     }
 }

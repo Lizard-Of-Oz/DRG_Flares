@@ -7,6 +7,7 @@ import me.lizardofoz.drgflares.block.FlareLightBlock;
 import me.lizardofoz.drgflares.block.FlareLightBlockEntity;
 import me.lizardofoz.drgflares.entity.FlareEntity;
 import me.lizardofoz.drgflares.item.FlareItem;
+import me.lizardofoz.drgflares.packet.PacketStuff;
 import me.lizardofoz.drgflares.packet.SpawnFlareEntityS2CPacket;
 import me.lizardofoz.drgflares.util.FlareColor;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
@@ -19,6 +20,7 @@ import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.MapColor;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
@@ -26,10 +28,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -116,5 +119,22 @@ public class DRGFlareRegistryFabric extends DRGFlareRegistry
         PacketByteBuf buf = new PacketByteBuf(PooledByteBufAllocator.DEFAULT.buffer());
         packet.write(buf);
         return ServerPlayNetworking.createS2CPacket(SpawnFlareEntityS2CPacket.IDENTIFIER, buf);
+    }
+
+    @Override
+    public void broadcastSettingsChange()
+    {
+        try
+        {
+            for (ServerPlayerEntity serverPlayerEntity : ((MinecraftServer) FabricLoader.getInstance().getGameInstance()).getPlayerManager().getPlayerList())
+                PacketStuff.sendSettingsSyncS2CPacket(serverPlayerEntity);
+        }
+        catch (Throwable ignored) { }
+        try
+        {
+            for (ServerPlayerEntity serverPlayerEntity : MinecraftClient.getInstance().getServer().getPlayerManager().getPlayerList())
+                PacketStuff.sendSettingsSyncS2CPacket(serverPlayerEntity);
+        }
+        catch (Throwable ignored) { }
     }
 }

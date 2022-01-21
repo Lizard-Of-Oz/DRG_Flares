@@ -1,11 +1,13 @@
 package me.lizardofoz.drgflares;
 
+import me.lizardofoz.drgflares.client.FlareEntityRenderer;
 import me.lizardofoz.drgflares.client.FlareHUDRenderer;
 import me.lizardofoz.drgflares.packet.PacketStuff;
 import me.lizardofoz.drgflares.util.DRGFlareLimiter;
 import me.lizardofoz.drgflares.util.DRGFlarePlayerAspect;
 import me.lizardofoz.drgflares.util.FlareColor;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.entity.EntityRenderers;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -15,8 +17,8 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.minecraftforge.fmlserverevents.FMLServerStartedEvent;
 
 public class ForgeEvents extends CommonEvents
 {
@@ -65,12 +67,15 @@ public class ForgeEvents extends CommonEvents
     @OnlyIn(Dist.CLIENT)
     private static class Client extends CommonEvents.Client
     {
-        private Client() { }
+        private Client()
+        {
+            EntityRenderers.register(DRGFlareRegistryForge.instance.getFlareEntityType(), FlareEntityRenderer::new);
+        }
 
         @SubscribeEvent
         public void onEvent(RenderGameOverlayEvent.Post event)
         {
-            if (event.getType() == RenderGameOverlayEvent.ElementType.HOTBAR)
+            if (event.getType() == RenderGameOverlayEvent.ElementType.ALL)
                 FlareHUDRenderer.render(event.getMatrixStack(), event.getPartialTicks());
         }
 

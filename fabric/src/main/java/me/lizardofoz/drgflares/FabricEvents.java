@@ -72,7 +72,7 @@ public class FabricEvents extends CommonEvents
 
             //HUD and Entity Renderer
             HudRenderCallback.EVENT.register(FlareHUDRenderer::render);
-            EntityRendererRegistry.INSTANCE.register(DRGFlareRegistryFabric.getInstance().getFlareEntityType(), (dispatcher, context) -> new FlareEntityRenderer(dispatcher));
+            EntityRendererRegistry.INSTANCE.register(DRGFlareRegistryFabric.getInstance().getFlareEntityType(), FlareEntityRenderer::new);
 
             //Packets
             ClientPlayNetworking.registerGlobalReceiver(SyncServerSettingsS2CPacket.IDENTIFIER, (client, handler, buf, sender) ->

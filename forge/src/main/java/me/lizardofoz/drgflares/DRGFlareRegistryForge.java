@@ -21,10 +21,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fmllegacy.server.ServerLifecycleHooks;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import java.util.HashMap;
@@ -43,7 +45,7 @@ public class DRGFlareRegistryForge extends DRGFlareRegistry
     @Getter private Block lightSourceBlockType;
     @Getter private BlockEntityType<FlareLightBlockEntity> lightSourceBlockEntityType;
 
-    @Getter(lazy = true) private final boolean isClothConfigLoaded = ModList.get().isLoaded("cloth-config"); //It's not "cloth-config2" unlike in Fabric - it's not a typo
+    @Getter(lazy = true) private final boolean isClothConfigLoaded = ModList.get().isLoaded("cloth_config"); //Come on, why did it have to change the mod id?
     @Getter(lazy = true) private final boolean isInventorioLoaded = ModList.get().isLoaded("inventorio");
 
     public static void initialize()
@@ -123,5 +125,16 @@ public class DRGFlareRegistryForge extends DRGFlareRegistry
         PacketByteBuf buf = new PacketByteBuf(PooledByteBufAllocator.DEFAULT.buffer());
         packet.write(buf);
         return PacketStuff.sendFlareSpawnS2CPacket(packet);
+    }
+
+    @Override
+    public void broadcastSettingsChange()
+    {
+        try
+        {
+            for (ServerPlayerEntity serverPlayerEntity : ServerLifecycleHooks.getCurrentServer().getPlayerManager().getPlayerList())
+                PacketStuff.sendSettingsSyncS2CPacket(serverPlayerEntity);
+        }
+        catch (Throwable ignored) { }
     }
 }
