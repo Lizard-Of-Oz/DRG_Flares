@@ -126,6 +126,11 @@ public class FlareEntity extends ThrownEntity
         return DRGFlareRegistry.getInstance().createSpawnFlareEntityPacket(this);
     }
 
+    public boolean isLit()
+    {
+        return lifespan < (ServerSettings.CURRENT.secondsUntilDimmingOut.value + ServerSettings.CURRENT.andThenSecondsUntilFizzlingOut.value) * 20;
+    }
+
     @Environment(EnvType.CLIENT)
     public void frame(float partialTick)
     {
@@ -231,8 +236,7 @@ public class FlareEntity extends ThrownEntity
         //While it COULD be useful for temporal mob-proofing, the upsides,
         //  such as server performance, not firing observers and not interfering with the flow of liquids, are far more important.
         //However, there's an option to enable server-side light sources anyway
-        if (lifespan < (ServerSettings.CURRENT.secondsUntilDimmingOut.value + ServerSettings.CURRENT.andThenSecondsUntilFizzlingOut.value) * 20
-                && (world.isClient || ServerSettings.CURRENT.serverSideLightSources.value))
+        if (isLit() && (world.isClient || ServerSettings.CURRENT.serverSideLightSources.value))
             spawnLightSource(isInsideWaterBlock);
     }
 
@@ -240,28 +244,34 @@ public class FlareEntity extends ThrownEntity
     {
         try
         {
+            //This bit is kinda ugly, but there's a set of edge cases when light sources get replaces with actual blocks
+            //And a flare losing any place it can place a light source at
             if (lightBlockPos == null)
-                lightBlockPos = findFreeSpace(world, getBlockPos());
-            if (lightBlockPos != null)
             {
-                if (lightBlockPos.isWithinDistance(getBlockPos(), ServerSettings.CURRENT.lightSourceRefreshDistance.value))
-                {
-                    if (lifespan < ServerSettings.CURRENT.secondsUntilDimmingOut.value * 20)
-                        world.setBlockState(lightBlockPos, FlareLightBlock.getFullBrightnessBlockState());
-                    else
-                        world.setBlockState(lightBlockPos, FlareLightBlock.getDimmedOutBlockState());
+                lightBlockPos = findFreeSpace(world, getBlockPos(), ServerSettings.CURRENT.lightSourceSearchDistance.value);
+                if (lightBlockPos == null)
+                    return;
 
-                    //Because a flare moves slightly in water, it used to create an edge case when a light source would rapidly flash on and off.
-                    //By having an old light source survive for longer than it takes to spawn a new one, we make sure the flicker doesn't happen
-                    BlockEntity blockEntity = world.getBlockEntity(lightBlockPos);
-                    if (blockEntity instanceof FlareLightBlockEntity)
-                        ((FlareLightBlockEntity) blockEntity).refresh(isInWaterBlock ? 20 : 0);
-                    else
-                        lightBlockPos = null;
-                }
+                BlockEntity blockEntity = world.getBlockEntity(lightBlockPos);
+                if (blockEntity instanceof FlareLightBlockEntity)
+                    ((FlareLightBlockEntity) blockEntity).refresh(isInWaterBlock ? 20 : 0);
+                else if (lifespan < ServerSettings.CURRENT.secondsUntilDimmingOut.value * 20)
+                    world.setBlockState(lightBlockPos, FlareLightBlock.getFullBrightnessBlockState());
+                else
+                    world.setBlockState(lightBlockPos, FlareLightBlock.getDimmedOutBlockState());
+            }
+            else if (checkDistance(lightBlockPos, getBlockPos(), ServerSettings.CURRENT.lightSourceRefreshDistance.value))
+            {
+                //Because a flare moves slightly in water, it used to create an edge case when a light source would rapidly flash on and off.
+                //By having an old light source survive for longer than it takes to spawn a new one, we make sure the flicker doesn't happen
+                BlockEntity blockEntity = world.getBlockEntity(lightBlockPos);
+                if (blockEntity instanceof FlareLightBlockEntity)
+                    ((FlareLightBlockEntity) blockEntity).refresh(isInWaterBlock ? 20 : 0);
                 else
                     lightBlockPos = null;
             }
+            else
+                lightBlockPos = null;
         }
         catch (Throwable e)
         {
@@ -269,20 +279,36 @@ public class FlareEntity extends ThrownEntity
         }
     }
 
-    private BlockPos findFreeSpace(World world, BlockPos blockPos)
+    private boolean checkDistance(BlockPos blockPosA, BlockPos blockPosB, int distance)
+    {
+        return Math.abs(blockPosA.getX() - blockPosB.getX()) <= distance
+                && Math.abs(blockPosA.getY() - blockPosB.getY()) <= distance
+                && Math.abs(blockPosA.getZ() - blockPosB.getZ()) <= distance;
+    }
+
+    private BlockPos findFreeSpace(World world, BlockPos blockPos, int maxDistance)
     {
         if (blockPos == null)
             return null;
-        if (world.getBlockState(blockPos).isAir())
-            return blockPos;
 
-        for(Direction direction: Direction.values())
+        //We want to find a valid position for a light source as close as possible to the flare
+        //Which means we want to iterate from 0;0;0 offset and move outside, rather than x=-2..2; y=-2..2; z=-2..2
+        int[] offsets = new int[maxDistance * 2 + 1];
+        offsets[0] = 0;
+        for (int i = 2; i <= maxDistance * 2; i += 2)
         {
-            BlockPos offsetPos = blockPos.offset(direction);
-            BlockState state = world.getBlockState(offsetPos);
-            if (state.isAir() || state.getBlock().equals(DRGFlareRegistry.getInstance().getLightSourceBlockType()))
-                return offsetPos;
+            offsets[i - 1] = i / 2;
+            offsets[i] = -i / 2;
         }
+        for (int x : offsets)
+            for (int y : offsets)
+                for (int z : offsets)
+                {
+                    BlockPos offsetPos = blockPos.add(x, y, z);
+                    BlockState state = world.getBlockState(offsetPos);
+                    if (state.isAir() || state.getBlock().equals(DRGFlareRegistry.getInstance().getLightSourceBlockType()))
+                        return offsetPos;
+                }
 
         return null;
     }

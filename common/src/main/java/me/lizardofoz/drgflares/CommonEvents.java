@@ -64,7 +64,7 @@ public abstract class CommonEvents
         protected void onClientTick(MinecraftClient client)
         {
             ClientPlayerEntity player = client.player;
-            if (player == null)
+            if (player == null || client.isPaused())
                 return;
             DRGFlareLimiter.tick();
             DRGFlarePlayerAspect.clientLocal.tick();

@@ -27,6 +27,8 @@ public abstract class DRGFlareRegistry
     public final SoundEvent FLARE_BOUNCE_EVENT = new SoundEvent(FLARE_BOUNCE);
     public final SoundEvent FLARE_BOUNCE_FAR_EVENT = new SoundEvent(FLARE_BOUNCE_FAR);
 
+    public ServerSyncMode serverSyncMode = ServerSyncMode.UNDEFINED;
+
     public abstract EntityType<FlareEntity> getFlareEntityType();
     public abstract Map<FlareColor, Item> getFlareItemTypes();
     public abstract Block getLightSourceBlockType();
@@ -34,5 +36,5 @@ public abstract class DRGFlareRegistry
     public abstract Packet<?> createSpawnFlareEntityPacket(FlareEntity flareEntity);
     public abstract boolean isClothConfigLoaded();
     public abstract boolean isInventorioLoaded();
-    public ServerSyncMode serverSyncMode = ServerSyncMode.UNDEFINED;
+    public abstract void broadcastSettingsChange();
 }

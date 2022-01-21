@@ -53,8 +53,10 @@ public class ServerSettings extends AbstractSettings
             new SettingsEntry.Integer(5, "seconds_until_idling_flare_gets_optimized", 0, Integer.MAX_VALUE);
     public final SettingsEntry.Integer lightSourceLifespanTicks =
             new SettingsEntry.Integer(10, "light_source_lifespan_ticks", 10, Integer.MAX_VALUE);
-    public final SettingsEntry.Float lightSourceRefreshDistance =
-            new SettingsEntry.Float(2f, "light_source_refresh_distance", 1, 50);
+    public final SettingsEntry.Integer lightSourceRefreshDistance =
+            new SettingsEntry.Integer(2, "light_source_refresh_distance", 1, 50);
+    public final SettingsEntry.Integer lightSourceSearchDistance =
+            new SettingsEntry.Integer(2, "light_source_search_distance", 1, 50);
     public final SettingsEntry.Boolean creativeUnlimitedRegeneratingFlares =
             new SettingsEntry.Boolean(true, "creative_unlimited_regenerating_flares");
     public final SettingsEntry.Boolean serverSideLightSources =
@@ -77,6 +79,7 @@ public class ServerSettings extends AbstractSettings
             secondsUntilIdlingFlareGetsOptimized,
             lightSourceLifespanTicks,
             lightSourceRefreshDistance,
+            lightSourceSearchDistance,
             creativeUnlimitedRegeneratingFlares,
             serverSideLightSources,
 

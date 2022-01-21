@@ -22,6 +22,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundEvent;
 import net.minecraftforge.api.distmarker.Dist;
@@ -29,9 +30,9 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -131,5 +132,16 @@ public class DRGFlareRegistryForge extends DRGFlareRegistry
         PacketByteBuf buf = new PacketByteBuf(PooledByteBufAllocator.DEFAULT.buffer());
         packet.write(buf);
         return PacketStuff.sendFlareSpawnS2CPacket(packet);
+    }
+
+    @Override
+    public void broadcastSettingsChange()
+    {
+        try
+        {
+            for (ServerPlayerEntity serverPlayerEntity : ServerLifecycleHooks.getCurrentServer().getPlayerManager().getPlayerList())
+                PacketStuff.sendSettingsSyncS2CPacket(serverPlayerEntity);
+        }
+        catch (Throwable ignored) { }
     }
 }

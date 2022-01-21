@@ -66,6 +66,8 @@
   "drg_flares.settings.light_source_lifespan_ticks.desc": "Flying flares leave fake invisible light sources behind\nto achieve its ability to light things up\n \nThis value sets for how long said lights should stay\n \nDoesn't affect idling flares, since they create a light source\nas close to the flare as possible, and only once",
   "drg_flares.settings.light_source_refresh_distance": "Light Source Refresh Distance",
   "drg_flares.settings.light_source_refresh_distance.desc": "Flying flares leave fake invisible light sources behind\nto achieve its ability to light things up\n \nThis value sets the max distance between the flare\nand the old light source at which a new light source won't be created\n \nDoesn't affect idling flares, since they create a light source\nas close to the flare as possible, and only once",
+  "drg_flares.settings.light_source_search_distance": "Light Source Free Space Search Distance",
+  "drg_flares.settings.light_source_search_distance.desc": "The maximum cubic distance from a Flare it will search for a valid space to put a Light Source",
   "drg_flares.settings.seconds_until_idling_flare_gets_optimized": "Idling Flare Optimization Time (Seconds)",
   "drg_flares.settings.seconds_until_idling_flare_gets_optimized.desc": "Flares' movement rarely needs\nto be calculated after it lands\n \nThis sets the threshold when\nan idling Flare disables movement calculation\n \n§bSet to 0 to disable idle optimization",
 

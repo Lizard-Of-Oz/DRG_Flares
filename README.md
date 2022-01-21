@@ -83,6 +83,7 @@ When you join a remote server featuring this mod, your settings will be synchron
 * `seconds_until_idling_flare_gets_optimized (5)` -Flares' movement rarely needs to be calculated after it lands. This sets the threshold when an idling flare disables movement calculation.
 * `light_source_lifespan_ticks (10)` - Flying flares leave fake invisible light sources behind to achieve its ability to light things up. This value sets for how long said lights should stay. Doesn't affect idling flares, since they create a light source as close to the flare as possible, and only once.
 * `light_source_refresh_distance (2)` - Sets the max distance between the flare and the old light source at which a new light source won't be created.
+* `light_source_search_distance (2)` - Sets the max cubic distance from a flare it will search for a valid space to put a Light Source
 * `creative_unlimited_regenerating_flares (true)` - Allows unlimited Regenerating Flares (if enabled) in Creative Mode.
 * `server_side_light_sources (false)` - We don't need temporary light sources from flares to exist on the server side. While it COULD be useful for temporal mob-proofing, enabling it lowers server performance, flares may interfere with the flow of liquids or cause observers to fire.
 
