@@ -97,9 +97,15 @@ When you join a remote server featuring this mod, your settings will be synchron
 Tip: you can configure flares to "warm up", if `full_brightness_light_level` will be set lower, than `dimmed_light_level`.
 
 ## Use in modpacks and with other mods
-You can include this mod in a modpack as long as your modpack is private OR the mod jar isn't embedded, but linked in the modpack manifest to be automatically downloaded by the client (which is the default way of including a mod in a CurseForge modpack anyway)
+You can include this mod in a modpack or as a dependency for your own mod.
 
-If you want to use this mode as a dependency, I recommend using JitPack. **Don't embed this mod inside your mod.**
+I just ask to respect my work and include it in a way that would count as a download of my mod by CurseForge and its Reward Program.
+
+* For Modpacks, CurseForge by default links a mod in the modpack manifest when you add it. Use _that_ instead of embedding the mod's jar into the modpack.
+* For Mods, don't embed the mod's jar inside your mod, but mark it as a dependency. 
+
+If you want to use this mode as a dependency, I recommend using JitPack.
+
 Please note that me using Architectury plugin makes the gradle setup to be different that normal:
 
 Fabric:
