@@ -56,6 +56,7 @@ public abstract class AbstractSettings
     {
         if (configFile == null)
             return;
+        try { configFile.getParentFile().mkdirs(); } catch (Throwable ignored) { }
         try (FileWriter writer = new FileWriter(configFile))
         {
             new GsonBuilder().setPrettyPrinting().create().toJson(asJson(), writer);

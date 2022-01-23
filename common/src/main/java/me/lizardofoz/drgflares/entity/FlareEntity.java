@@ -266,7 +266,17 @@ public class FlareEntity extends ThrownEntity
                 //By having an old light source survive for longer than it takes to spawn a new one, we make sure the flicker doesn't happen
                 BlockEntity blockEntity = world.getBlockEntity(lightBlockPos);
                 if (blockEntity instanceof FlareLightBlockEntity)
+                {
+                    int lightLevel = FlareLightBlock.getLightLevel(world, lightBlockPos);
+                    if (lifespan < ServerSettings.CURRENT.secondsUntilDimmingOut.value * 20)
+                    {
+                        if (lightLevel != ServerSettings.CURRENT.fullBrightnessLightLevel.value)
+                            world.setBlockState(lightBlockPos, FlareLightBlock.getFullBrightnessBlockState());
+                    }
+                    else if (lightLevel != ServerSettings.CURRENT.dimmedLightLevel.value)
+                        world.setBlockState(lightBlockPos, FlareLightBlock.getDimmedOutBlockState());
                     ((FlareLightBlockEntity) blockEntity).refresh(isInWaterBlock ? 20 : 0);
+                }
                 else
                     lightBlockPos = null;
             }

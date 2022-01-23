@@ -67,7 +67,7 @@ public class DRGFlareRegistryFabric extends DRGFlareRegistry
             flares.put(color, Registry.register(
                     Registry.ITEM,
                     new Identifier("drg_flares", "drg_flare_" + color.toString()),
-                    new FlareItem(new FabricItemSettings().group(ItemGroup.MISC))));
+                    new FlareItem(new FabricItemSettings().group(color == FlareColor.RANDOM || color == FlareColor.RANDOM_BRIGHT_ONLY ? null : ItemGroup.MISC))));
 
         flareItemTypes = ImmutableMap.copyOf(flares);
     }

@@ -13,6 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
+import net.minecraft.world.World;
 
 @SuppressWarnings("deprecation")
 public class FlareLightBlock extends Block implements BlockEntityProvider
@@ -27,6 +28,18 @@ public class FlareLightBlock extends Block implements BlockEntityProvider
         BlockState defaultState = DRGFlareRegistry.getInstance().getLightSourceBlockType().getDefaultState();
         fullBrightnessBlockState = defaultState.with(LIGHT_LEVEL, ServerSettings.CURRENT.fullBrightnessLightLevel.value);
         dimmedOutBlockState = defaultState.with(LIGHT_LEVEL, ServerSettings.CURRENT.dimmedLightLevel.value);
+    }
+
+    public static int getLightLevel(World world, BlockPos blockPos)
+    {
+        try
+        {
+            return world.getBlockState(blockPos).get(FlareLightBlock.LIGHT_LEVEL);
+        }
+        catch (Throwable e)
+        {
+            return 0;
+        }
     }
 
     public FlareLightBlock(Settings settings)
