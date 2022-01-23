@@ -81,7 +81,7 @@ public class DRGFlaresUtil
 
     public static int getVoidDamageLevel(World world)
     {
-        return -64;
+        return world.getBottomY() - 64;
     }
 
     public static boolean hasUnlimitedRegeneratingFlares(PlayerEntity player)

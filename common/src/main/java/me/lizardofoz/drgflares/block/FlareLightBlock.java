@@ -32,6 +32,18 @@ public class FlareLightBlock extends BlockWithEntity
         dimmedOutBlockState = defaultState.with(LIGHT_LEVEL, ServerSettings.CURRENT.dimmedLightLevel.value);
     }
 
+    public static int getLightLevel(World world, BlockPos blockPos)
+    {
+        try
+        {
+            return world.getBlockState(blockPos).get(FlareLightBlock.LIGHT_LEVEL);
+        }
+        catch (Throwable e)
+        {
+            return 0;
+        }
+    }
+
     public FlareLightBlock(Settings settings)
     {
         super(settings);
