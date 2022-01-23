@@ -26,9 +26,9 @@ import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fmllegacy.server.ServerLifecycleHooks;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.server.ServerLifecycleHooks;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -73,7 +73,7 @@ public class DRGFlareRegistryForge extends DRGFlareRegistry
 
         for (FlareColor color : FlareColor.values())
         {
-            Item flareItem = new FlareItem(new Item.Settings().group(ItemGroup.MISC));
+            Item flareItem = new FlareItem(new Item.Settings().group(color == FlareColor.RANDOM || color == FlareColor.RANDOM_BRIGHT_ONLY ? null : ItemGroup.MISC));
             ITEMS.register("drg_flare_" + color.toString(), () -> flareItem);
             flares.put(color, flareItem);
         }

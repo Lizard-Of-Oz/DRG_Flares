@@ -1,7 +1,7 @@
 package me.lizardofoz.drgflares.packet;
 
 import net.minecraft.network.PacketByteBuf;
-import net.minecraftforge.fmllegacy.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 import java.util.function.Supplier;
 
 public class SpawnFlareEntityS2CPacketWrapper

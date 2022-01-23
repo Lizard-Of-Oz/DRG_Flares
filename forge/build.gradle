@@ -17,14 +17,6 @@ configurations {
     developmentFabric.extendsFrom common
 }
 
-minecraft {
-    runs {
-        client {
-            property "forge.logging.console.level", "debug"
-        }
-    }
-}
-
 loom {
     forge {
         mixinConfig "drg_flares.mixins.json"

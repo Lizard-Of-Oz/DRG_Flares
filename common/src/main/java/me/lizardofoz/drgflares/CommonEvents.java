@@ -83,7 +83,7 @@ public abstract class CommonEvents
                         sendFlareThrowC2SPacket(flareColor);
                 }
                 else if (ServerSettings.CURRENT.regeneratingFlaresEnabled.value)
-                    player.playSound(SoundEvents.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.1f, 1.7f);
+                    player.playSound(SoundEvents.UI_BUTTON_CLICK, SoundCategory.MASTER, PlayerSettings.INSTANCE.flareSoundVolume.value / 1234f, 1.7f);
             }
         }
 

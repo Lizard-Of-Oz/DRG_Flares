@@ -7,7 +7,7 @@ import me.lizardofoz.drgflares.block.FlareLightBlock;
 import me.lizardofoz.drgflares.config.ServerSettings;
 import me.lizardofoz.drgflares.util.ServerSyncMode;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraftforge.fmllegacy.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 import java.util.function.Supplier;
 
 public class SyncServerSettingsS2CPacket

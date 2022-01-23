@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import me.lizardofoz.drgflares.DRGFlares;
-
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -56,6 +55,7 @@ public abstract class AbstractSettings
     {
         if (configFile == null)
             return;
+        try { configFile.getParentFile().mkdirs(); } catch (Throwable ignored) { }
         try (FileWriter writer = new FileWriter(configFile))
         {
             new GsonBuilder().setPrettyPrinting().create().toJson(asJson(), writer);

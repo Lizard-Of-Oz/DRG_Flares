@@ -9,7 +9,7 @@ import me.lizardofoz.inventorio.api.InventorioAPI;
 import me.lizardofoz.inventorio.player.PlayerInventoryAddon;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraftforge.fmllegacy.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 import java.util.function.Supplier;
 
 public class ThrowFlareC2SPacketWrapper

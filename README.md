@@ -111,7 +111,7 @@ repositories {
 
 dependencies {
   ...
-  modCompileOnly 'com.github.Lizard-Of-Oz.DRG_Flares:drg_flares-1.17-fabric:1.17-SNAPSHOT'
+  modCompileOnly 'com.github.Lizard-Of-Oz.DRG_Flares:drg_flares-1.18-fabric:1.18-SNAPSHOT'
 }
 ```
 
@@ -124,7 +124,7 @@ repositories {
 
 dependencies {
   ...
-  compileOnly 'com.github.Lizard-Of-Oz.DRG_Flares:drg_flares-1.17-forge:1.17-SNAPSHOT'
+  compileOnly 'com.github.Lizard-Of-Oz.DRG_Flares:drg_flares-1.18-forge:1.18-SNAPSHOT'
   //If you're using Architectury, you might need to use modCompileOnly instead of compileOnly
 }
 ```

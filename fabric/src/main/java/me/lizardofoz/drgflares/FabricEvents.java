@@ -16,7 +16,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
@@ -72,7 +72,7 @@ public class FabricEvents extends CommonEvents
 
             //HUD and Entity Renderer
             HudRenderCallback.EVENT.register(FlareHUDRenderer::render);
-            EntityRendererRegistry.INSTANCE.register(DRGFlareRegistryFabric.getInstance().getFlareEntityType(), FlareEntityRenderer::new);
+            EntityRendererRegistry.register(DRGFlareRegistryFabric.getInstance().getFlareEntityType(), FlareEntityRenderer::new);
 
             //Packets
             ClientPlayNetworking.registerGlobalReceiver(SyncServerSettingsS2CPacket.IDENTIFIER, (client, handler, buf, sender) ->

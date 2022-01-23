@@ -16,9 +16,9 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.loading.FMLEnvironment;
-import net.minecraftforge.fmlserverevents.FMLServerStartedEvent;
 
 public class ForgeEvents extends CommonEvents
 {
@@ -35,7 +35,7 @@ public class ForgeEvents extends CommonEvents
     private ForgeEvents() { }
 
     @SubscribeEvent
-    public void onEvent(FMLServerStartedEvent event)
+    public void onEvent(ServerStartedEvent event)
     {
         onServerStart(event.getServer());
     }

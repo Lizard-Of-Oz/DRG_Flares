@@ -69,7 +69,7 @@ public class FlareHUDRenderer
             //Amount Text
             String countText = String.valueOf(count);
             VertexConsumerProvider.Immediate provider = VertexConsumerProvider.immediate(bufferBuilder);
-            client.textRenderer.draw(countText, (float) (widgetX + 19 - 2 - client.textRenderer.getWidth(countText)), (float) (widgetY + 6 + 3), 16777215, true, matrixStack.peek().getModel(), provider, false, 0, 15728880);
+            client.textRenderer.draw(countText, (float) (widgetX + 19 - 2 - client.textRenderer.getWidth(countText)), (float) (widgetY + 6 + 3), 16777215, true, matrixStack.peek().getPositionMatrix(), provider, false, 0, 15728880);
             provider.draw();
         }
 
@@ -79,7 +79,7 @@ public class FlareHUDRenderer
             matrixStack.push();
             matrixStack.scale(0.7f, 0.7f, 0.7f);
             VertexConsumerProvider.Immediate provider = VertexConsumerProvider.immediate(bufferBuilder);
-            client.textRenderer.draw(keyHintLabel, (float) (widgetX + 15) / 0.7f, (float) (widgetY - 4) / 0.7f, 16777215, true, matrixStack.peek().getModel(), provider, false, 0, 15728880);
+            client.textRenderer.draw(keyHintLabel, (float) (widgetX + 15) / 0.7f, (float) (widgetY - 4) / 0.7f, 16777215, true, matrixStack.peek().getPositionMatrix(), provider, false, 0, 15728880);
             provider.draw();
             matrixStack.pop();
         }
