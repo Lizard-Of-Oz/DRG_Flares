@@ -1,7 +1,7 @@
 # DRG Flares (Forge / Fabric)
 
 ## Showcase Video
-[![Video Demonstration](https://user-images.githubusercontent.com/701551/149723954-4e4b0d37-10c3-4a06-90c8-85882124f1b9.png)](https://youtu.be/IlnwIly0Qh0)
+[![Video Demonstration](https://user-images.githubusercontent.com/701551/149723954-4e4b0d37-10c3-4a06-90c8-85882124f1b9.png)](https://www.youtube.com/watch?v=IlnwIly0Qh0&list=PLLPcDTfsnq__Y156d2WBYeHsxemQou7CX&index=1)
 
 ## About
 _"Did I hear a Rock and Stone?"_
