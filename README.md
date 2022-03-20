@@ -130,7 +130,7 @@ repositories {
 
 dependencies {
   ...
-  compileOnly 'com.github.Lizard-Of-Oz.DRG_Flares:drg_flares-1.18-forge:1.18-SNAPSHOT'
+  compileOnly 'com.github.Lizard-Of-Oz.DRG_Flares:drg_flares-1.18.2-forge:1.18.2-SNAPSHOT'
   //If you're using Architectury, you might need to use modCompileOnly instead of compileOnly
 }
 ```

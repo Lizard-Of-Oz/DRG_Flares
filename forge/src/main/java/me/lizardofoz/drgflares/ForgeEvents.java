@@ -1,13 +1,11 @@
 package me.lizardofoz.drgflares;
 
-import me.lizardofoz.drgflares.client.FlareEntityRenderer;
 import me.lizardofoz.drgflares.client.FlareHUDRenderer;
 import me.lizardofoz.drgflares.packet.PacketStuff;
 import me.lizardofoz.drgflares.util.DRGFlareLimiter;
 import me.lizardofoz.drgflares.util.DRGFlarePlayerAspect;
 import me.lizardofoz.drgflares.util.FlareColor;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.entity.EntityRenderers;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -69,7 +67,6 @@ public class ForgeEvents extends CommonEvents
     {
         private Client()
         {
-            EntityRenderers.register(DRGFlareRegistryForge.instance.getFlareEntityType(), FlareEntityRenderer::new);
         }
 
         @SubscribeEvent
