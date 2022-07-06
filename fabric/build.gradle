@@ -1,5 +1,5 @@
 plugins {
-    id "com.github.johnrengelman.shadow" version "7.0.0"
+    id "com.github.johnrengelman.shadow" version "7.1.2"
 }
 
 archivesBaseName = "${rootProject.archives_base_name}-${rootProject.base_mc_version}-fabric"
@@ -28,7 +28,7 @@ dependencies {
 
     //Other mods we do integration with
     modCompileOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
-    modCompileOnly ("com.github.Lizard-Of-Oz.Inventorio:inventorio-${rootProject.base_mc_version}-fabric:${rootProject.base_mc_version}-SNAPSHOT") { transitive = false }
+    modCompileOnly "curse.maven:inventorio-491073:3842567" //Inventorio 1.19
 
     //"Common" package
     common(project(path: ":common", configuration: "namedElements")) {

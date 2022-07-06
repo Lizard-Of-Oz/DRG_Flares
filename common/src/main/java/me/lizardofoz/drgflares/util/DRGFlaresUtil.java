@@ -3,7 +3,6 @@ package me.lizardofoz.drgflares.util;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import me.lizardofoz.drgflares.DRGFlareRegistry;
-import me.lizardofoz.drgflares.DRGFlares;
 import me.lizardofoz.drgflares.config.ServerSettings;
 import me.lizardofoz.drgflares.entity.FlareEntity;
 import me.lizardofoz.drgflares.item.FlareItem;
@@ -27,32 +26,11 @@ import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Random;
 
 public class DRGFlaresUtil
 {
     private DRGFlaresUtil() { }
-
-    private static List<Recipe<?>> flareRecipesCache;
-
-    public static void unlockFlareRecipes(PlayerEntity player)
-    {
-        try
-        {
-            if (ServerSettings.CURRENT.flareRecipesInSurvival.value)
-            {
-                if (flareRecipesCache == null)
-                    flareRecipesCache = player.world.getServer().getRecipeManager().values().stream()
-                            .filter(it -> it.getId().getNamespace().equals("drg_flares"))
-                            .collect(Collectors.toList());
-                player.unlockRecipes(flareRecipesCache);
-            }
-        }
-        catch (Throwable e)
-        {
-            DRGFlares.LOGGER.error("Failed to Unlock Flare Recipes for " + player, e);
-        }
-    }
 
     public static void setRecipes(RecipeManager recipeManager, Iterable<Recipe<?>> recipes)
     {
@@ -128,7 +106,7 @@ public class DRGFlaresUtil
     @Environment(EnvType.CLIENT)
     public static void playSoundFromEntityOnClient(Entity entity, SoundEvent sound, SoundCategory category, float volume, float pitch)
     {
-        MinecraftClient.getInstance().getSoundManager().play(new EntityTrackingSoundInstance(sound, category, volume, pitch, entity));
+        MinecraftClient.getInstance().getSoundManager().play(new EntityTrackingSoundInstance(sound, category, volume, pitch, entity, new Random().nextLong()));
     }
 
     @Environment(EnvType.CLIENT)

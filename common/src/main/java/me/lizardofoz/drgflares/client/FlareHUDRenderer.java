@@ -32,7 +32,7 @@ public class FlareHUDRenderer
         int widgetX = (int) (client.getWindow().getScaledWidth() * PlayerSettings.INSTANCE.flareUISlotX.value);
         int widgetY = (int) (client.getWindow().getScaledHeight() * PlayerSettings.INSTANCE.flareUISlotY.value) - 19;
         Text keyHintLabel = PlayerSettings.INSTANCE.throwFlareKey.getBoundKeyLocalizedText();
-        boolean shouldRenderKeybindHint = PlayerSettings.INSTANCE.flareButtonHint.value && keyHintLabel.asString().length() == 1;
+        boolean shouldRenderKeybindHint = PlayerSettings.INSTANCE.flareButtonHint.value && keyHintLabel.getString().length() == 1;
         FlareColor flareColor = FlareColor.RandomColorPicker.unwrapRandom(PlayerSettings.INSTANCE.flareColor.value, false);
         ItemStack flareDisplayStack = new ItemStack(DRGFlareRegistry.getInstance().getFlareItemTypes().get(flareColor));
         BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();

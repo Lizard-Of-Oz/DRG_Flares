@@ -73,7 +73,7 @@ public class ForgeEvents extends CommonEvents
         public void onEvent(RenderGameOverlayEvent.Post event)
         {
             if (event.getType() == RenderGameOverlayEvent.ElementType.ALL)
-                FlareHUDRenderer.render(event.getMatrixStack(), event.getPartialTicks());
+                FlareHUDRenderer.render(event.getPoseStack(), event.getPartialTick());
         }
 
         @SubscribeEvent

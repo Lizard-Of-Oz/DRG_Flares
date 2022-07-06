@@ -104,33 +104,22 @@ I just ask to respect my work and include it in a way that would count as a down
 * For Modpacks, CurseForge by default links a mod in the modpack manifest when you add it. Use _that_ instead of embedding the mod's jar into the modpack.
 * For Mods, don't embed the mod's jar inside your mod, but mark it as a dependency. 
 
-If you want to use this mode as a dependency, I recommend using JitPack.
+If you want to use this mode as a dependency, I recommend using [CurseMaven](https://www.cursemaven.com/).
 
-Please note that me using Architectury plugin makes the gradle setup to be different that normal:
+Be advised that you need to manually keep track of the latest version available.   
 
-Fabric:
 ```
 repositories {
-  ...
-  maven { url 'https://jitpack.io' }
+  maven {
+    url "https://cursemaven.com"
+    content {
+      includeGroup "curse.maven"
+    }
+  }
 }
 
 dependencies {
-  ...
-  modCompileOnly 'com.github.Lizard-Of-Oz.DRG_Flares:drg_flares-1.18-fabric:1.18-SNAPSHOT'
-}
-```
-
-Forge:
-```
-repositories {
-  ...
-  maven { url 'https://jitpack.io' }
-}
-
-dependencies {
-  ...
-  compileOnly 'com.github.Lizard-Of-Oz.DRG_Flares:drg_flares-1.18.2-forge:1.18.2-SNAPSHOT'
-  //If you're using Architectury, you might need to use modCompileOnly instead of compileOnly
+  modCompileOnly "curse.maven:drg_flares-568533:3861310" //Fabric
+  modCompileOnly "curse.maven:drg_flares-568536:3861311" //Forge
 }
 ```

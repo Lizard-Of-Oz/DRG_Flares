@@ -46,7 +46,6 @@ public abstract class CommonEvents
     {
         DRGFlareLimiter.onPlayerJoin(player);
         DRGFlarePlayerAspect.onPlayerJoin(player);
-        DRGFlaresUtil.unlockFlareRecipes(player);
         sendSettingsSyncS2CPacket(player);
     }
 

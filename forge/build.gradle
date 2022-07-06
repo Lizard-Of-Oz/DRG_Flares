@@ -1,5 +1,5 @@
 plugins {
-    id "com.github.johnrengelman.shadow" version "7.0.0"
+    id "com.github.johnrengelman.shadow" version "7.1.2"
 }
 
 archivesBaseName = "${rootProject.archives_base_name}-${rootProject.base_mc_version}-forge"
@@ -29,7 +29,7 @@ dependencies {
     modImplementation("me.shedaniel.cloth:cloth-config-forge:${rootProject.cloth_config_version}")
 
     //Other mods we do integration with
-    modCompileOnly ("com.github.Lizard-Of-Oz.Inventorio:inventorio-${rootProject.base_mc_version}-forge:${rootProject.base_mc_version}-SNAPSHOT") { transitive = false }
+    modCompileOnly "curse.maven:inventorio-497122:3842575" //Inventorio 1.19
 
     //"Common" package
     common(project(path: ":common", configuration: "namedElements")) {

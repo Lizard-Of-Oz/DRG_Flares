@@ -25,14 +25,15 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.BlockSoundGroup;
-import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.Identifier;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegisterEvent;
 import net.minecraftforge.server.ServerLifecycleHooks;
 import java.util.HashMap;
 import java.util.Map;
@@ -58,70 +59,58 @@ public class DRGFlareRegistryForge extends DRGFlareRegistry
     }
 
     @SubscribeEvent
-    public void registerFlareItems(RegistryEvent.Register<Item> event)
+    public void forgePleaseStopChangingYourAPI(RegisterEvent event)
     {
-        Map<FlareColor, Item> flares = new HashMap<>();
+        event.register(ForgeRegistries.Keys.ITEMS, helper -> {
+            Map<FlareColor, Item> flares = new HashMap<>();
 
-        for (FlareColor color : FlareColor.values())
-        {
-            Item flareItem = new FlareItem(new Item.Settings().group(color == FlareColor.RANDOM || color == FlareColor.RANDOM_BRIGHT_ONLY ? null : ItemGroup.MISC));
-            flareItem.setRegistryName("drg_flare_" + color.toString());
-            event.getRegistry().register(flareItem);
-            flares.put(color, flareItem);
-        }
+            for (FlareColor color : FlareColor.values())
+            {
+                ItemGroup creativeTab = color == FlareColor.RANDOM || color == FlareColor.RANDOM_BRIGHT_ONLY ? null : ItemGroup.MISC;
+                Item flareItem = new FlareItem(new Item.Settings().group(creativeTab));
+                helper.register(new Identifier("drg_flares", "drg_flare_" + color.toString()), flareItem);
+                flares.put(color, flareItem);
+            }
 
-        flareItemTypes = ImmutableMap.copyOf(flares);
-        FlareDispenserBehavior.initialize();
-    }
+            flareItemTypes = ImmutableMap.copyOf(flares);
+            FlareDispenserBehavior.initialize();
+        });
 
-    @SubscribeEvent
-    public void registerFlareEntity(RegistryEvent.Register<EntityType<?>> event)
-    {
-        flareEntityType = EntityType.Builder.create(FlareEntity::make, SpawnGroup.MISC)
-                .setDimensions(0.4f, 0.2f)
-                .setTrackingRange(64)
-                .spawnableFarFromPlayer()
-                .trackingTickInterval(1)
-                .build("drg_flares:drg_flare");
-        flareEntityType.setRegistryName("drg_flare");
-        event.getRegistry().register(flareEntityType);
-    }
+        event.register(ForgeRegistries.Keys.ENTITY_TYPES, helper -> {
+            flareEntityType = EntityType.Builder.create(FlareEntity::make, SpawnGroup.MISC)
+                    .setDimensions(0.4f, 0.2f)
+                    .setTrackingRange(64)
+                    .spawnableFarFromPlayer()
+                    .trackingTickInterval(1)
+                    .build("drg_flares:drg_flare");
+            helper.register(new Identifier("drg_flares", "drg_flare"), flareEntityType);
+        });
 
-    @SubscribeEvent
-    public void registerLightBlock(RegistryEvent.Register<Block> event)
-    {
-        lightSourceBlockType = new FlareLightBlock(
-                AbstractBlock.Settings.of(
-                        new Material.Builder(MapColor.CLEAR)
-                                .replaceable()
-                                .notSolid()
-                                .build())
-                        .sounds(BlockSoundGroup.WOOD)
-                        .strength(3600000.8F)
-                        .dropsNothing()
-                        .nonOpaque()
-                        .luminance((state) -> state.get(FlareLightBlock.LIGHT_LEVEL)))
-                        .setRegistryName("flare_light_block");
-        event.getRegistry().register(lightSourceBlockType);
-    }
+        event.register(ForgeRegistries.Keys.BLOCKS, helper -> {
+            lightSourceBlockType = new FlareLightBlock(
+                    AbstractBlock.Settings.of(
+                                    new Material.Builder(MapColor.CLEAR)
+                                            .replaceable()
+                                            .notSolid()
+                                            .build())
+                            .sounds(BlockSoundGroup.WOOD)
+                            .strength(3600000.8F)
+                            .dropsNothing()
+                            .nonOpaque()
+                            .luminance((state) -> state.get(FlareLightBlock.LIGHT_LEVEL)));
+            helper.register(new Identifier("drg_flares", "flare_light_block"), lightSourceBlockType);
+        });
 
-    @SubscribeEvent
-    public void registerLightBlockEntity(RegistryEvent.Register<BlockEntityType<?>> event)
-    {
-        lightSourceBlockEntityType = BlockEntityType.Builder.create(FlareLightBlockEntity::new, lightSourceBlockType).build(null);
-        lightSourceBlockEntityType.setRegistryName("flare_light_block_entity");
-        event.getRegistry().register(lightSourceBlockEntityType);
-    }
+        event.register(ForgeRegistries.Keys.BLOCK_ENTITY_TYPES, helper -> {
+            lightSourceBlockEntityType = BlockEntityType.Builder.create(FlareLightBlockEntity::new, lightSourceBlockType).build(null);
+            helper.register(new Identifier("drg_flares", "flare_light_block_entity"), lightSourceBlockEntityType);
+        });
 
-    @SubscribeEvent
-    public void registerSounds(RegistryEvent.Register<SoundEvent> event)
-    {
-        FLARE_THROW_EVENT.setRegistryName(FLARE_THROW.getPath());
-        FLARE_BOUNCE_EVENT.setRegistryName(FLARE_BOUNCE.getPath());
-        FLARE_BOUNCE_FAR_EVENT.setRegistryName(FLARE_BOUNCE_FAR.getPath());
-        event.getRegistry().register(FLARE_THROW_EVENT);
-        event.getRegistry().register(FLARE_BOUNCE_EVENT);
-        event.getRegistry().register(FLARE_BOUNCE_FAR_EVENT);
+        event.register(ForgeRegistries.Keys.SOUND_EVENTS, helper -> {
+            helper.register(FLARE_THROW, FLARE_THROW_EVENT);
+            helper.register(FLARE_BOUNCE, FLARE_BOUNCE_EVENT);
+            helper.register(FLARE_BOUNCE_FAR, FLARE_BOUNCE_FAR_EVENT);
+        });
     }
 
     @SubscribeEvent
