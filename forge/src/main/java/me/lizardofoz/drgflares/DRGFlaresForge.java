@@ -8,7 +8,7 @@ import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.ConfigGuiHandler;
+import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.fml.IExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -44,7 +44,7 @@ public final class DRGFlaresForge extends DRGFlares
             keys[keys.length - 1] = PlayerSettings.INSTANCE.throwFlareKey;
             if (DRGFlareRegistryForge.getInstance().isClothConfigLoaded())
             {
-                ModLoadingContext.get().registerExtensionPoint(ConfigGuiHandler.ConfigGuiFactory.class, () -> new ConfigGuiHandler.ConfigGuiFactory((client, parent) -> SettingsScreen.create(parent)));
+                ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () -> new ConfigScreenHandler.ConfigScreenFactory((client, parent) -> SettingsScreen.create(parent)));
                 keys[keys.length - 2] = PlayerSettings.INSTANCE.flareModSettingsKey;
             }
             options.allKeys = keys;

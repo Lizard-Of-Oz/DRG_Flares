@@ -10,7 +10,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.CustomizeGuiOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -41,13 +41,13 @@ public class ForgeEvents extends CommonEvents
     @SubscribeEvent
     public void onEvent(PlayerEvent.PlayerLoggedInEvent event)
     {
-        onPlayerJoinServer((ServerPlayerEntity) event.getPlayer());
+        onPlayerJoinServer((ServerPlayerEntity) event.getEntity());
     }
 
     @SubscribeEvent
     public void onEvent(PlayerEvent.PlayerLoggedOutEvent event)
     {
-        onPlayerLeaveServer(event.getPlayer());
+        onPlayerLeaveServer(event.getEntity());
     }
 
     @SubscribeEvent
@@ -70,20 +70,19 @@ public class ForgeEvents extends CommonEvents
         }
 
         @SubscribeEvent
-        public void onEvent(RenderGameOverlayEvent.Post event)
+        public void onEvent(CustomizeGuiOverlayEvent event)
         {
-            if (event.getType() == RenderGameOverlayEvent.ElementType.ALL)
-                FlareHUDRenderer.render(event.getPoseStack(), event.getPartialTick());
+            FlareHUDRenderer.render(event.getPoseStack(), event.getPartialTick());
         }
 
         @SubscribeEvent
-        public void onEvent(ClientPlayerNetworkEvent.LoggedInEvent event)
+        public void onEvent(ClientPlayerNetworkEvent.LoggingIn event)
         {
             onClientConnect();
         }
 
         @SubscribeEvent
-        public void onEvent(ClientPlayerNetworkEvent.LoggedOutEvent event)
+        public void onEvent(ClientPlayerNetworkEvent.LoggingOut event)
         {
             onClientDisconnect();
         }
