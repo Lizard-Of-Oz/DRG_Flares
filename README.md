@@ -19,9 +19,9 @@ Flares come in Minecraft's standard 16 colors, including Red, Pink, and Black...
 Please note that a flying flare may cause a noticeable FPS drop due to how Minecraft's lighting engine works.
 
 ### Regenerating Flares
-As seen in DRG, a player has up to 4 flares which regenerate over time, which can be thrown with a dedicated "Throw Flare" keybind ('v' by default) 
+As seen in DRG, a player has up to 4 flares which regenerate over time, which can be thrown with a dedicated "Throw Flare" keybind ('v' by default)
 
-Enabled by default, but can be turned off in favor of (or ran simultaneously with) the following option. 
+Enabled by default, but can be turned off in favor of (or ran simultaneously with) the following option.
 
 ### Survival Flares
 Disabled by default. If enabled, players will be able to craft and use flares as any other Minecraft item. Flares can also be shot from Dispensers.
@@ -32,7 +32,7 @@ If Regenerating Flares are disabled, "Throw Flare" keybind will throw a Survival
 
 Regenerating flares work even without the mod being installed on the server!
 
-In this case, nobody else will see your flares, even if they also have the mod installed. After all, flares don't actually exist in this mode and just faked on your side.   
+In this case, nobody else will see your flares, even if they also have the mod installed. After all, flares don't actually exist in this mode and just faked on your side.
 
 Survival Flares and Server-Side Light Sources also won't work unless installed on the server.
 
@@ -61,7 +61,7 @@ When you join a remote server featuring this mod, your settings will be synchron
 * `flare_button_hint (true)` - Display the key assigned to throwing a flare on the HUD. The hint won't be displayed for non-letter keybinds.
 
 #### Server Settings
-* `regenerating_flares_enabled (default: true)` - Flares regenerate over time and can be thrown with a press of a button, as seen in Deep Rock Galactic.  
+* `regenerating_flares_enabled (default: true)` - Flares regenerate over time and can be thrown with a press of a button, as seen in Deep Rock Galactic.
 * `regenerating_flare_recharge_time (4)` - Sets the Flare regeneration period in seconds. Set to 0 for unlimited Flares in Survival.
 * `regenerating_flare_max_charges (4)` - Max amount of Regenerating Flares you can hold at any given time. Set to 0 for unlimited Flares in Survival.
 * `flare_entity_limit_per_player (50)` - Too many entities (which flares are) may cause lag. Each player has their own threshold, after exceeding which their oldest flares will get deleted. Flares of non-player origin (e.g. a dispenser or modded things) go into their own shared pool. Set to 0 for Unlimited.
@@ -99,38 +99,27 @@ Tip: you can configure flares to "warm up", if `full_brightness_light_level` wil
 ## Use in modpacks and with other mods
 You can include this mod in a modpack or as a dependency for your own mod.
 
-I just ask to respect my work and include it in a way that would count as a download of my mod by CurseForge and its Reward Program.
+I just ask you to respect my work and include it in a way that would count as a download of my mod by CurseForge and its Reward Program.
 
 * For Modpacks, CurseForge by default links a mod in the modpack manifest when you add it. Use _that_ instead of embedding the mod's jar into the modpack.
-* For Mods, don't embed the mod's jar inside your mod, but mark it as a dependency. 
+* For Mods, don't embed the mod's jar inside your mod, but mark it as a dependency.
 
-If you want to use this mode as a dependency, I recommend using JitPack.
+If you want to use this mode as a dependency, I recommend using [CurseMaven](https://www.cursemaven.com/).
 
-Please note that me using Architectury plugin makes the gradle setup to be different that normal:
+Be advised that you need to manually keep track of the latest version available.
 
-Fabric:
 ```
 repositories {
-  ...
-  maven { url 'https://jitpack.io' }
+  maven {
+    url "https://cursemaven.com"
+    content {
+      includeGroup "curse.maven"
+    }
+  }
 }
 
 dependencies {
-  ...
-  modCompileOnly 'com.github.Lizard-Of-Oz.DRG_Flares:drg_flares-1.18-fabric:1.18-SNAPSHOT'
-}
-```
-
-Forge:
-```
-repositories {
-  ...
-  maven { url 'https://jitpack.io' }
-}
-
-dependencies {
-  ...
-  compileOnly 'com.github.Lizard-Of-Oz.DRG_Flares:drg_flares-1.18.2-forge:1.18.2-SNAPSHOT'
-  //If you're using Architectury, you might need to use modCompileOnly instead of compileOnly
+  modCompileOnly "curse.maven:drg_flares-568533:3620439" //Fabric
+  modCompileOnly "curse.maven:drg_flares-568536:3704538" //Forge
 }
 ```
