@@ -99,7 +99,7 @@ Tip: you can configure flares to "warm up", if `full_brightness_light_level` wil
 ## Use in modpacks and with other mods
 You can include this mod in a modpack or as a dependency for your own mod.
 
-I just ask to respect my work and include it in a way that would count as a download of my mod by CurseForge and its Reward Program.
+I just ask you to respect my work and include it in a way that would count as a download of my mod by CurseForge and its Reward Program.
 
 * For Modpacks, CurseForge by default links a mod in the modpack manifest when you add it. Use _that_ instead of embedding the mod's jar into the modpack.
 * For Mods, don't embed the mod's jar inside your mod, but mark it as a dependency. 
@@ -120,6 +120,6 @@ repositories {
 
 dependencies {
   modCompileOnly "curse.maven:drg_flares-568533:3861310" //Fabric
-  modCompileOnly "curse.maven:drg_flares-568536:3861311" //Forge
+  modCompileOnly "curse.maven:drg_flares-568536:3910732" //Forge
 }
 ```
