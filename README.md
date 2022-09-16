@@ -3,6 +3,12 @@
 ## Showcase Video
 [![Video Demonstration](https://user-images.githubusercontent.com/701551/149723954-4e4b0d37-10c3-4a06-90c8-85882124f1b9.png)](https://youtu.be/IlnwIly0Qh0)
 
+If you want to support the development of mods like this, you can do it [here](https://boosty.to/lizardofoz).
+
+[![Support me](https://static.boosty.to/assets/images/boostyLogo.WbAVE.svg)](https://boosty.to/lizardofoz)
+
+Every dollar (or, in this case, ruble) counts and allows me to spend more time making various projects for your enjoyment.
+
 ## About
 _"Did I hear a Rock and Stone?"_
 
