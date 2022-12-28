@@ -20,6 +20,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.thrown.ThrownEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
+import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -122,7 +123,7 @@ public class FlareEntity extends ThrownEntity
     }
 
     @Override
-    public Packet<?> createSpawnPacket()
+    public Packet<ClientPlayPacketListener> createSpawnPacket()
     {
         return DRGFlareRegistry.getInstance().createSpawnFlareEntityPacket(this);
     }

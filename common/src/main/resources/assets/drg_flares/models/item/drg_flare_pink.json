@@ -1,6 +1,6 @@
 {
   "parent": "drg_flares:item/drg_flare_base",
   "textures": {
-    "texture": "drg_flares:entity/drg_flare_pink"
+    "texture": "drg_flares:block/drg_flare_pink"
   }
 }

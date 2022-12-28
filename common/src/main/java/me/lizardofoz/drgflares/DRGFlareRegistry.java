@@ -9,10 +9,11 @@ import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.network.Packet;
+import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
-
 import java.util.Map;
 
 public abstract class DRGFlareRegistry
@@ -23,9 +24,9 @@ public abstract class DRGFlareRegistry
     protected final Identifier FLARE_BOUNCE = new Identifier("drg_flares:flare_bounce");
     protected final Identifier FLARE_BOUNCE_FAR = new Identifier("drg_flares:flare_bounce_far");
 
-    public final SoundEvent FLARE_THROW_EVENT = new SoundEvent(FLARE_THROW);
-    public final SoundEvent FLARE_BOUNCE_EVENT = new SoundEvent(FLARE_BOUNCE);
-    public final SoundEvent FLARE_BOUNCE_FAR_EVENT = new SoundEvent(FLARE_BOUNCE_FAR);
+    public final SoundEvent FLARE_THROW_EVENT = SoundEvent.of(FLARE_THROW);
+    public final SoundEvent FLARE_BOUNCE_EVENT = SoundEvent.of(FLARE_BOUNCE);
+    public final SoundEvent FLARE_BOUNCE_FAR_EVENT = SoundEvent.of(FLARE_BOUNCE_FAR, 64);
 
     public ServerSyncMode serverSyncMode = ServerSyncMode.UNDEFINED;
 
@@ -33,8 +34,9 @@ public abstract class DRGFlareRegistry
     public abstract Map<FlareColor, Item> getFlareItemTypes();
     public abstract Block getLightSourceBlockType();
     public abstract BlockEntityType<FlareLightBlockEntity> getLightSourceBlockEntityType();
-    public abstract Packet<?> createSpawnFlareEntityPacket(FlareEntity flareEntity);
+    public abstract Packet<ClientPlayPacketListener> createSpawnFlareEntityPacket(FlareEntity flareEntity);
     public abstract boolean isClothConfigLoaded();
     public abstract boolean isInventorioLoaded();
     public abstract void broadcastSettingsChange();
+    public abstract ItemGroup getCreativeItemGroup();
 }

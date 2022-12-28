@@ -125,7 +125,7 @@ repositories {
 }
 
 dependencies {
-  modCompileOnly "curse.maven:drg_flares-568533:3861310" //Fabric
-  modCompileOnly "curse.maven:drg_flares-568536:3910732" //Forge
+  modCompileOnly "curse.maven:drg_flares-568533:4276091" //Fabric
+  modCompileOnly "curse.maven:drg_flares-568536:4276092" //Forge
 }
 ```

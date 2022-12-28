@@ -11,8 +11,8 @@ import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3f;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,7 +46,7 @@ public class FlareEntityRenderer extends EntityRenderer<FlareEntity>
         metalModel = metalModelBuilder.createPart(32, 32);
 
         for (FlareColor color : FlareColor.colors)
-            TEXTURES.put(color, new Identifier("drg_flares", "textures/entity/drg_flare_" + color.toString() + ".png"));
+            TEXTURES.put(color, new Identifier("drg_flares", "textures/block/drg_flare_" + color.toString() + ".png"));
     }
 
     @Override
@@ -61,10 +61,10 @@ public class FlareEntityRenderer extends EntityRenderer<FlareEntity>
         matrices.translate(0, 0.1f, 0);
         //Here's a trick - we want each flare to end up with a different rotation when laying on the floor.
         //We could use random.setSeed(entId), but this works as good as that, but much faster
-        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(entity.getId() * 119));
-        matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(entity.rotation));
-        matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(MathHelper.sin((float) (velocity.x + 90) / 15) * 360));
-        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(MathHelper.cos((float) (velocity.y + velocity.x * 200) / 15) * 360));
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(entity.getId() * 119));
+        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(entity.rotation));
+        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(MathHelper.sin((float) (velocity.x + 90) / 15) * 360));
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(MathHelper.cos((float) (velocity.y + velocity.x * 200) / 15) * 360));
         matrices.scale(0.6f, 0.6f, 0.6f);
 
         VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RenderLayer.getEntityCutout(TEXTURES.get(entity.color)));

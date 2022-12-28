@@ -11,6 +11,8 @@ import me.lizardofoz.drgflares.packet.PacketStuff;
 import me.lizardofoz.drgflares.packet.SpawnFlareEntityS2CPacket;
 import me.lizardofoz.drgflares.util.FlareColor;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricMaterialBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
@@ -26,13 +28,17 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.BlockSoundGroup;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,6 +48,7 @@ public class DRGFlareRegistryFabric extends DRGFlareRegistry
     @Getter private Map<FlareColor, Item> flareItemTypes;
     @Getter private Block lightSourceBlockType;
     @Getter private BlockEntityType<FlareLightBlockEntity> lightSourceBlockEntityType;
+    @Getter private ItemGroup creativeItemGroup;
 
     @Getter(lazy = true) private final boolean isClothConfigLoaded = FabricLoader.getInstance().isModLoaded("cloth-config2");
     @Getter(lazy = true) private final boolean isInventorioLoaded = FabricLoader.getInstance().isModLoaded("inventorio");
@@ -61,13 +68,24 @@ public class DRGFlareRegistryFabric extends DRGFlareRegistry
 
     private void registerFlareItems()
     {
+        creativeItemGroup = FabricItemGroup
+                .builder(new Identifier("drg_flares", "drg_flares"))
+                .icon(() -> new ItemStack(flareItemTypes.get(FlareColor.MAGENTA)))
+                .displayName(Text.translatable("itemGroup.drg_flares"))
+                .build();
+
         Map<FlareColor, Item> flares = new HashMap<>();
 
         for (FlareColor color : FlareColor.colors)
-            flares.put(color, Registry.register(
-                    Registry.ITEM,
+        {
+            Item flareItem = Registry.register(
+                    Registries.ITEM,
                     new Identifier("drg_flares", "drg_flare_" + color.toString()),
-                    new FlareItem(new FabricItemSettings().group(color == FlareColor.RANDOM || color == FlareColor.RANDOM_BRIGHT_ONLY ? null : ItemGroup.MISC))));
+                    new FlareItem(new FabricItemSettings()));
+            flares.put(color, flareItem);
+            if (color != FlareColor.RANDOM && color != FlareColor.RANDOM_BRIGHT_ONLY)
+                ItemGroupEvents.modifyEntriesEvent(creativeItemGroup).register(content -> content.add(flareItem));
+        }
 
         flareItemTypes = ImmutableMap.copyOf(flares);
     }
@@ -88,14 +106,14 @@ public class DRGFlareRegistryFabric extends DRGFlareRegistry
                         .luminance((state) -> state.get(FlareLightBlock.LIGHT_LEVEL)));
         lightSourceBlockEntityType = FabricBlockEntityTypeBuilder.create(FlareLightBlockEntity::new, lightSourceBlockType).build(null);
 
-        Registry.register(Registry.BLOCK, new Identifier("drg_flares", "flare_light_block"), lightSourceBlockType);
-        Registry.register(Registry.BLOCK_ENTITY_TYPE, new Identifier("drg_flares", "flare_light_block_entity"), lightSourceBlockEntityType);
+        Registry.register(Registries.BLOCK, new Identifier("drg_flares", "flare_light_block"), lightSourceBlockType);
+        Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier("drg_flares", "flare_light_block_entity"), lightSourceBlockEntityType);
     }
 
     private void registerFlareEntity()
     {
         flareEntityType = Registry.register(
-                Registry.ENTITY_TYPE,
+                Registries.ENTITY_TYPE,
                 new Identifier("drg_flares", "drg_flare"),
                 FabricEntityTypeBuilder.create(SpawnGroup.MISC, FlareEntity::make)
                         .dimensions(EntityDimensions.fixed(0.4f, 0.2f))
@@ -107,13 +125,13 @@ public class DRGFlareRegistryFabric extends DRGFlareRegistry
 
     private void registerSounds()
     {
-        Registry.register(Registry.SOUND_EVENT, FLARE_THROW, FLARE_THROW_EVENT);
-        Registry.register(Registry.SOUND_EVENT, FLARE_BOUNCE, FLARE_BOUNCE_EVENT);
-        Registry.register(Registry.SOUND_EVENT, FLARE_BOUNCE_FAR, FLARE_BOUNCE_FAR_EVENT);
+        Registry.register(Registries.SOUND_EVENT, FLARE_THROW, FLARE_THROW_EVENT);
+        Registry.register(Registries.SOUND_EVENT, FLARE_BOUNCE, FLARE_BOUNCE_EVENT);
+        Registry.register(Registries.SOUND_EVENT, FLARE_BOUNCE_FAR, FLARE_BOUNCE_FAR_EVENT);
     }
 
     @Override
-    public Packet<?> createSpawnFlareEntityPacket(FlareEntity flareEntity)
+    public Packet<ClientPlayPacketListener> createSpawnFlareEntityPacket(FlareEntity flareEntity)
     {
         SpawnFlareEntityS2CPacket packet = new SpawnFlareEntityS2CPacket(flareEntity);
         PacketByteBuf buf = new PacketByteBuf(PooledByteBufAllocator.DEFAULT.buffer());

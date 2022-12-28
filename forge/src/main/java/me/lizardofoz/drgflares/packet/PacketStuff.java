@@ -5,6 +5,7 @@ import me.lizardofoz.drgflares.util.DRGFlarePlayerAspect;
 import me.lizardofoz.drgflares.util.FlareColor;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.Packet;
+import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraftforge.api.distmarker.Dist;
@@ -47,9 +48,9 @@ public final class PacketStuff
         INSTANCE.sendTo(new SyncServerSettingsS2CPacket(ServerSettings.LOCAL.asJson()), player.networkHandler.connection, NetworkDirection.PLAY_TO_CLIENT);
     }
 
-    public static Packet<?> sendFlareSpawnS2CPacket(SpawnFlareEntityS2CPacket packet)
+    public static Packet<ClientPlayPacketListener> sendFlareSpawnS2CPacket(SpawnFlareEntityS2CPacket packet)
     {
-        return INSTANCE.toVanillaPacket(new SpawnFlareEntityS2CPacketWrapper(packet), NetworkDirection.PLAY_TO_CLIENT);
+        return (Packet<ClientPlayPacketListener>) INSTANCE.toVanillaPacket(new SpawnFlareEntityS2CPacketWrapper(packet), NetworkDirection.PLAY_TO_CLIENT);
     }
 
     @OnlyIn(Dist.CLIENT)

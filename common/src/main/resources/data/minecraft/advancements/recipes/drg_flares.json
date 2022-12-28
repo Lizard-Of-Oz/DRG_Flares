@@ -1,0 +1,33 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "drg_flares:drg_flare_black",
+      "drg_flares:drg_flare_blue",
+      "drg_flares:drg_flare_brown",
+      "drg_flares:drg_flare_cyan",
+      "drg_flares:drg_flare_gray",
+      "drg_flares:drg_flare_green",
+      "drg_flares:drg_flare_light_blue",
+      "drg_flares:drg_flare_light_gray",
+      "drg_flares:drg_flare_lime",
+      "drg_flares:drg_flare_magenta",
+      "drg_flares:drg_flare_orange",
+      "drg_flares:drg_flare_pink",
+      "drg_flares:drg_flare_purple",
+      "drg_flares:drg_flare_red",
+      "drg_flares:drg_flare_white",
+      "drg_flares:drg_flare_yellow"
+    ]
+  },
+  "criteria": {
+    "exists": {
+      "trigger": "minecraft:tick"
+    }
+  },
+  "requirements": [
+    [
+      "exists"
+    ]
+  ]
+}

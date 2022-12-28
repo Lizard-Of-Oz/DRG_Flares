@@ -88,7 +88,7 @@ public class FlareHUDRenderer
 
     private static void renderGuiQuad(BufferBuilder buffer, int x, int y, int width, int height, int z, int red, int green, int blue)
     {
-        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
         buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
         buffer.vertex(x, y, z).color(red, green, blue, 255).next();
         buffer.vertex(x, y + height, z).color(red, green, blue, 255).next();
