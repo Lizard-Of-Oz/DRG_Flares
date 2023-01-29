@@ -3,11 +3,13 @@
 ## Showcase Video
 [![Video Demonstration](https://user-images.githubusercontent.com/701551/149723954-4e4b0d37-10c3-4a06-90c8-85882124f1b9.png)](https://youtu.be/IlnwIly0Qh0)
 
-If you want to support the development of mods like this, you can do it [here](https://boosty.to/lizardofoz).
+If you want to thank me for this mod and support the ongoing maintenance, you can do it on [Boosty](https://boosty.to/lizardofoz/posts/2564ef09-39bf-4f82-8b2f-82dce5a95901?share=post_link) or [Patreon](https://patreon.com/LizardOfOz?utm_medium=clipboard_copy&utm_source=copyLink&utm_campaign=creatorshare_creator).
 
-[![Support me](https://static.boosty.to/assets/images/boostyLogo.WbAVE.svg)](https://boosty.to/lizardofoz)
+[![Support me](https://static.boosty.to/assets/images/boostyLogo.WbAVE.svg)](https://boosty.to/lizardofoz/posts/2564ef09-39bf-4f82-8b2f-82dce5a95901?share=post_link)
 
-Every dollar (or, in this case, ruble) counts and allows me to spend more time making various projects for your enjoyment.
+[<img src="https://user-images.githubusercontent.com/701551/197443351-d42d2bd4-a527-4405-83d5-f07814a47637.png" width="233" height="64">](https://patreon.com/LizardOfOz?utm_medium=clipboard_copy&utm_source=copyLink&utm_campaign=creatorshare_creator)
+
+Every dollar counts and allows me to spend more time making [future projects](https://boosty.to/lizardofoz/posts/adfdd24f-587a-4799-8f56-c364d59057f0?share=post_link) for your enjoyment.
 
 ## About
 _"Did I hear a Rock and Stone?"_
