@@ -29,7 +29,7 @@ dependencies {
     modImplementation("me.shedaniel.cloth:cloth-config-forge:${rootProject.cloth_config_version}")
 
     //Other mods we do integration with
-    modCompileOnly "curse.maven:inventorio-497122:3842575" //Inventorio 1.19
+    modCompileOnly "curse.maven:inventorio-497122:4619077" //Inventorio 1.19
 
     //"Common" package
     common(project(path: ":common", configuration: "namedElements")) {

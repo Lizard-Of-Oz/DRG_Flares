@@ -11,9 +11,8 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.*;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -25,7 +24,7 @@ public class FlareHUDRenderer
     private static final Identifier HUD_TEXTURE = new Identifier("drg_flares", "textures/gui/hud.png");
     private static final MinecraftClient client = MinecraftClient.getInstance();
 
-    public static void render(MatrixStack matrixStack, float tickDelta)
+    public static void render(DrawContext drawContext, float tickDelta)
     {
         if (!ServerSettings.CURRENT.regeneratingFlaresEnabled.value || client.player == null || client.player.isSpectator())
             return;
@@ -39,13 +38,12 @@ public class FlareHUDRenderer
         BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
 
         //Frame
-        RenderSystem.setShaderTexture(0, HUD_TEXTURE);
         RenderSystem.enableBlend();
-        DrawableHelper.drawTexture(matrixStack, widgetX - 3, widgetY - 3, -200, 0, 0, 22, 22, 32, 32);  //Frame
+        drawContext.drawTexture(HUD_TEXTURE, widgetX - 3, widgetY - 3, -200, 0, 0, 22, 22, 32, 32);  //Frame
         if (shouldRenderKeybindHint)
-            DrawableHelper.drawTexture(matrixStack, widgetX + 12, widgetY - 6, -200, 22, 0, 10, 10, 32, 32); //Keybind hint bcg
+            drawContext.drawTexture(HUD_TEXTURE, widgetX + 12, widgetY - 6, -200, 22, 0, 10, 10, 32, 32); //Keybind hint bcg
 
-        client.getItemRenderer().renderInGuiWithOverrides(matrixStack, flareDisplayStack, widgetX, widgetY, 0, -170);
+        drawContext.drawItem(flareDisplayStack, widgetX, widgetY, 0, -170);
 
         if (!DRGFlaresUtil.hasUnlimitedRegeneratingFlares(client.player))
         {
@@ -65,19 +63,19 @@ public class FlareHUDRenderer
             //Amount Text
             String countText = String.valueOf(count);
             VertexConsumerProvider.Immediate provider = VertexConsumerProvider.immediate(bufferBuilder);
-            client.textRenderer.draw(countText, (float) (widgetX + 19 - 2 - client.textRenderer.getWidth(countText)), (float) (widgetY + 6 + 3), 16777215, true, matrixStack.peek().getPositionMatrix(), provider, TextRenderer.TextLayerType.NORMAL, 0, 15728880);
+            client.textRenderer.draw(countText, (float) (widgetX + 19 - 2 - client.textRenderer.getWidth(countText)), (float) (widgetY + 6 + 3), 16777215, true, drawContext.getMatrices().peek().getPositionMatrix(), provider, TextRenderer.TextLayerType.NORMAL, 0, 15728880);
             provider.draw();
         }
 
         //Keybind Hint Text
         if (shouldRenderKeybindHint)
         {
-            matrixStack.push();
-            matrixStack.scale(0.7f, 0.7f, 0.7f);
+            drawContext.getMatrices().push();
+            drawContext.getMatrices().scale(0.7f, 0.7f, 0.7f);
             VertexConsumerProvider.Immediate provider = VertexConsumerProvider.immediate(bufferBuilder);
-            client.textRenderer.draw(keyHintLabel, (float) (widgetX + 15) / 0.7f, (float) (widgetY - 4) / 0.7f, 16777215, true, matrixStack.peek().getPositionMatrix(), provider, TextRenderer.TextLayerType.NORMAL, 0, 15728880);
+            client.textRenderer.draw(keyHintLabel, (float) (widgetX + 15) / 0.7f, (float) (widgetY - 4) / 0.7f, 16777215, true, drawContext.getMatrices().peek().getPositionMatrix(), provider, TextRenderer.TextLayerType.NORMAL, 0, 15728880);
             provider.draw();
-            matrixStack.pop();
+            drawContext.getMatrices().pop();
         }
     }
 

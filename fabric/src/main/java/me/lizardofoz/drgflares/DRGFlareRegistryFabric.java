@@ -14,14 +14,14 @@ import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricMaterialBuilder;
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.MapColor;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
@@ -29,11 +29,13 @@ import net.minecraft.entity.SpawnGroup;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.packet.Packet;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.BlockSoundGroup;
@@ -48,7 +50,7 @@ public class DRGFlareRegistryFabric extends DRGFlareRegistry
     @Getter private Map<FlareColor, Item> flareItemTypes;
     @Getter private Block lightSourceBlockType;
     @Getter private BlockEntityType<FlareLightBlockEntity> lightSourceBlockEntityType;
-    @Getter private ItemGroup creativeItemGroup;
+    @Getter private final RegistryKey<ItemGroup> creativeItemGroup = RegistryKey.of(RegistryKeys.ITEM_GROUP, new Identifier("drg_flares", "drg_flares"));
 
     @Getter(lazy = true) private final boolean isClothConfigLoaded = FabricLoader.getInstance().isModLoaded("cloth-config2");
     @Getter(lazy = true) private final boolean isInventorioLoaded = FabricLoader.getInstance().isModLoaded("inventorio");
@@ -68,11 +70,11 @@ public class DRGFlareRegistryFabric extends DRGFlareRegistry
 
     private void registerFlareItems()
     {
-        creativeItemGroup = FabricItemGroup
-                .builder(new Identifier("drg_flares", "drg_flares"))
-                .icon(() -> new ItemStack(flareItemTypes.get(FlareColor.MAGENTA)))
-                .displayName(Text.translatable("itemGroup.drg_flares"))
-                .build();
+        Registry.register(Registries.ITEM_GROUP, creativeItemGroup,
+                FabricItemGroup.builder()
+                        .icon(() -> new ItemStack(flareItemTypes.get(FlareColor.MAGENTA)))
+                        .displayName(Text.translatable("drg_flares.creative_group"))
+                        .build());
 
         Map<FlareColor, Item> flares = new HashMap<>();
 
@@ -93,16 +95,15 @@ public class DRGFlareRegistryFabric extends DRGFlareRegistry
     private void registerLightBlock()
     {
         lightSourceBlockType = new FlareLightBlock(
-                AbstractBlock.Settings.of(
-                        new FabricMaterialBuilder(MapColor.CLEAR)
-                                .replaceable()
-                                .lightPassesThrough()
-                                .notSolid()
-                                .build())
+                FabricBlockSettings.create()
+                        .mapColor(MapColor.CLEAR)
+                        .replaceable()
+                        .notSolid()
                         .sounds(BlockSoundGroup.WOOD)
                         .strength(3600000.8F)
                         .dropsNothing()
                         .nonOpaque()
+                        .pistonBehavior(PistonBehavior.DESTROY)
                         .luminance((state) -> state.get(FlareLightBlock.LIGHT_LEVEL)));
         lightSourceBlockEntityType = FabricBlockEntityTypeBuilder.create(FlareLightBlockEntity::new, lightSourceBlockType).build(null);
 

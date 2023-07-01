@@ -29,5 +29,9 @@
     "minecraft": ">=${base_mc_version}",
     "fabricloader": ">=${fabric_loader_version}",
     "fabric": "*"
+  },
+  "suggests": {
+    "modmenu":"*",
+    "cloth-config2": "*"
   }
 }

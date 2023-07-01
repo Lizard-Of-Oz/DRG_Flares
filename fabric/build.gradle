@@ -28,7 +28,7 @@ dependencies {
 
     //Other mods we do integration with
     modCompileOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
-    modCompileOnly "curse.maven:inventorio-491073:3842567" //Inventorio 1.19
+    modCompileOnly "curse.maven:inventorio-491073:4619078" //Inventorio 1.19
 
     //"Common" package
     common(project(path: ":common", configuration: "namedElements")) {

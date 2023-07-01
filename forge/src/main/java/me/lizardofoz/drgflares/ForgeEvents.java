@@ -72,7 +72,7 @@ public class ForgeEvents extends CommonEvents
         @SubscribeEvent
         public void onEvent(CustomizeGuiOverlayEvent event)
         {
-            FlareHUDRenderer.render(event.getPoseStack(), event.getPartialTick());
+            FlareHUDRenderer.render(event.getGuiGraphics(), event.getPartialTick());
         }
 
         @SubscribeEvent

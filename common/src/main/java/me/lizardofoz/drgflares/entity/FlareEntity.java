@@ -54,7 +54,7 @@ public class FlareEntity extends ThrownEntity
 
     private FlareEntity(LivingEntity owner, FlareColor color)
     {
-        super(DRGFlareRegistry.getInstance().getFlareEntityType(), owner, owner.world);
+        super(DRGFlareRegistry.getInstance().getFlareEntityType(), owner, owner.getWorld());
         this.color = FlareColor.RandomColorPicker.unwrapRandom(color, false);
         //Technically, we shouldn't receive "Random" as a Flare Color here, but just in case...
     }
@@ -69,16 +69,16 @@ public class FlareEntity extends ThrownEntity
         FlareEntity flareEntity = new FlareEntity(owner, color);
         flareEntity.setPos(flareEntity.getX(), flareEntity.getY() - 0.5, flareEntity.getZ());
         flareEntity.setVelocity(owner, owner.getPitch() - pitchModifier, owner.getYaw(), 0, 0.75f * ServerSettings.CURRENT.flareThrowSpeed.value, 1);
-        if (!owner.world.isClient)
-            owner.world.spawnEntity(flareEntity);
+        if (!owner.getWorld().isClient)
+            owner.getWorld().spawnEntity(flareEntity);
         else
         {
             //EntityId magic to avoid clashing with entityId-s of real entities
             int randomNegativeId = flareEntity.getId() - 100000;
-            while (owner.world.getEntityById(randomNegativeId) != null)
-                randomNegativeId = owner.world.getRandom().nextInt(1000000) - 2000000;
+            while (owner.getWorld().getEntityById(randomNegativeId) != null)
+                randomNegativeId = owner.getWorld().getRandom().nextInt(1000000) - 2000000;
             flareEntity.setId(randomNegativeId);
-            DRGFlaresUtil.addEntityOnClient(owner.world, flareEntity);
+            DRGFlaresUtil.addEntityOnClient(owner.getWorld(), flareEntity);
         }
         return flareEntity;
     }
@@ -156,9 +156,9 @@ public class FlareEntity extends ThrownEntity
         BlockPos hitBlockPos = blockHitResult.getBlockPos();
 
         bounceCount++;
-        if (world.isClient && !isTouchingWater())
+        if (getWorld().isClient && !isTouchingWater())
         {
-            float pitch = 1.1f + world.random.nextFloat() * 0.3f;
+            float pitch = 1.1f + getWorld().random.nextFloat() * 0.3f;
             float volume = PlayerSettings.INSTANCE.flareSoundVolume.value / 100.0f;
             float farVolume = volume < 0.25f ? volume * 3 : volume < 0.5f ? volume * 2 : volume;
             DRGFlaresUtil.playSoundFromEntityOnClient(this, DRGFlareRegistry.getInstance().FLARE_BOUNCE_EVENT, SoundCategory.MASTER, volume, pitch);
@@ -175,7 +175,7 @@ public class FlareEntity extends ThrownEntity
         else
         {
             lastHitBlockPos = hitBlockPos;
-            lastHitBlockState = world.getBlockState(hitBlockPos);
+            lastHitBlockState = getWorld().getBlockState(hitBlockPos);
         }
 
         double speedDivider = ServerSettings.CURRENT.flareSpeedBounceDivider.value;
@@ -195,13 +195,13 @@ public class FlareEntity extends ThrownEntity
                 + ServerSettings.CURRENT.andThenSecondsUntilFizzlingOut.value
                 + ServerSettings.CURRENT.andThenSecondsUntilDespawn.value;
 
-        if (++lifespan == 0 && world.isClient)
+        if (++lifespan == 0 && getWorld().isClient)
             DRGFlaresUtil.playSoundFromEntityOnClient(this, DRGFlareRegistry.getInstance().FLARE_THROW_EVENT, SoundCategory.MASTER, PlayerSettings.INSTANCE.flareSoundVolume.value / 100.0f, 1);
 
-        if (lifespan > ticksUntilDespawn * 20 || isInLava() || getY() <= DRGFlaresUtil.getVoidDamageLevel(world))
+        if (lifespan > ticksUntilDespawn * 20 || isInLava() || getY() <= DRGFlaresUtil.getVoidDamageLevel(getWorld()))
             kill();
 
-        if (!world.isClient || DRGFlareRegistry.getInstance().serverSyncMode == ServerSyncMode.CLIENT_ONLY)
+        if (!getWorld().isClient || DRGFlareRegistry.getInstance().serverSyncMode == ServerSyncMode.CLIENT_ONLY)
             DRGFlareLimiter.reportFlare(this);
         else
             frame(0);
@@ -225,7 +225,7 @@ public class FlareEntity extends ThrownEntity
             lightBlockPos = null;
 
         //If the block bellow the flare has changed or it's in water, then re-enable gravity
-        boolean isInsideWaterBlock = world.isWater(getBlockPos());
+        boolean isInsideWaterBlock = getWorld().isWater(getBlockPos());
         if (hasNoGravity() && (isInsideWaterBlock || !getLandingBlockState().equals(lastHitBlockState)))
         {
             setNoGravity(false);
@@ -238,7 +238,7 @@ public class FlareEntity extends ThrownEntity
         //While it COULD be useful for temporal mob-proofing, the upsides,
         //  such as server performance, not firing observers and not interfering with the flow of liquids, are far more important.
         //However, there's an option to enable server-side light sources anyway
-        if (isLit() && (world.isClient || ServerSettings.CURRENT.serverSideLightSources.value))
+        if (isLit() && (getWorld().isClient || ServerSettings.CURRENT.serverSideLightSources.value))
             spawnLightSource(isInsideWaterBlock);
     }
 
@@ -250,33 +250,33 @@ public class FlareEntity extends ThrownEntity
             //And a flare losing any place it can place a light source at
             if (lightBlockPos == null)
             {
-                lightBlockPos = findFreeSpace(world, getBlockPos(), ServerSettings.CURRENT.lightSourceSearchDistance.value);
+                lightBlockPos = findFreeSpace(getWorld(), getBlockPos(), ServerSettings.CURRENT.lightSourceSearchDistance.value);
                 if (lightBlockPos == null)
                     return;
 
-                BlockEntity blockEntity = world.getBlockEntity(lightBlockPos);
+                BlockEntity blockEntity = getWorld().getBlockEntity(lightBlockPos);
                 if (blockEntity instanceof FlareLightBlockEntity)
                     ((FlareLightBlockEntity) blockEntity).refresh(isInWaterBlock ? 20 : 0);
                 else if (lifespan < ServerSettings.CURRENT.secondsUntilDimmingOut.value * 20)
-                    world.setBlockState(lightBlockPos, FlareLightBlock.getFullBrightnessBlockState());
+                    getWorld().setBlockState(lightBlockPos, FlareLightBlock.getFullBrightnessBlockState());
                 else
-                    world.setBlockState(lightBlockPos, FlareLightBlock.getDimmedOutBlockState());
+                    getWorld().setBlockState(lightBlockPos, FlareLightBlock.getDimmedOutBlockState());
             }
             else if (checkDistance(lightBlockPos, getBlockPos(), ServerSettings.CURRENT.lightSourceRefreshDistance.value))
             {
                 //Because a flare moves slightly in water, it used to create an edge case when a light source would rapidly flash on and off.
                 //By having an old light source survive for longer than it takes to spawn a new one, we make sure the flicker doesn't happen
-                BlockEntity blockEntity = world.getBlockEntity(lightBlockPos);
+                BlockEntity blockEntity = getWorld().getBlockEntity(lightBlockPos);
                 if (blockEntity instanceof FlareLightBlockEntity)
                 {
-                    int lightLevel = FlareLightBlock.getLightLevel(world, lightBlockPos);
+                    int lightLevel = FlareLightBlock.getLightLevel(getWorld(), lightBlockPos);
                     if (lifespan < ServerSettings.CURRENT.secondsUntilDimmingOut.value * 20)
                     {
                         if (lightLevel != ServerSettings.CURRENT.fullBrightnessLightLevel.value)
-                            world.setBlockState(lightBlockPos, FlareLightBlock.getFullBrightnessBlockState());
+                            getWorld().setBlockState(lightBlockPos, FlareLightBlock.getFullBrightnessBlockState());
                     }
                     else if (lightLevel != ServerSettings.CURRENT.dimmedLightLevel.value)
-                        world.setBlockState(lightBlockPos, FlareLightBlock.getDimmedOutBlockState());
+                        getWorld().setBlockState(lightBlockPos, FlareLightBlock.getDimmedOutBlockState());
                     ((FlareLightBlockEntity) blockEntity).refresh(isInWaterBlock ? 20 : 0);
                 }
                 else

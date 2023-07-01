@@ -7,7 +7,6 @@ import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.state.property.Properties;
@@ -83,12 +82,6 @@ public class FlareLightBlock extends BlockWithEntity
     public float getAmbientOcclusionLightLevel(BlockState state, BlockView world, BlockPos pos)
     {
         return 1;
-    }
-
-    @Override
-    public PistonBehavior getPistonBehavior(BlockState state)
-    {
-        return PistonBehavior.DESTROY;
     }
 
     @Override

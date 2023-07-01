@@ -10,8 +10,9 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
-import net.minecraft.network.packet.Packet;
 import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import java.util.Map;
@@ -38,5 +39,5 @@ public abstract class DRGFlareRegistry
     public abstract boolean isClothConfigLoaded();
     public abstract boolean isInventorioLoaded();
     public abstract void broadcastSettingsChange();
-    public abstract ItemGroup getCreativeItemGroup();
+    public abstract RegistryKey<ItemGroup> getCreativeItemGroup();
 }
