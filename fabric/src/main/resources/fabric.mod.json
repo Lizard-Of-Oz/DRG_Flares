@@ -26,7 +26,7 @@
     "drg_flares.mixins.json"
   ],
   "depends": {
-    "minecraft": "${base_mc_version}.x",
+    "minecraft": ">=${base_mc_version}",
     "fabricloader": ">=${fabric_loader_version}",
     "fabric": "*"
   }

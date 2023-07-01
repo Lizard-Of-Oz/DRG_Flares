@@ -10,6 +10,7 @@ import me.lizardofoz.drgflares.util.FlareColor;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
@@ -44,10 +45,7 @@ public class FlareHUDRenderer
         if (shouldRenderKeybindHint)
             DrawableHelper.drawTexture(matrixStack, widgetX + 12, widgetY - 6, -200, 22, 0, 10, 10, 32, 32); //Keybind hint bcg
 
-        float zOffset = client.getItemRenderer().zOffset;
-        client.getItemRenderer().zOffset = -170;
-        client.getItemRenderer().renderInGuiWithOverrides(flareDisplayStack, widgetX, widgetY);
-        client.getItemRenderer().zOffset = zOffset;
+        client.getItemRenderer().renderInGuiWithOverrides(matrixStack, flareDisplayStack, widgetX, widgetY, 0, -170);
 
         if (!DRGFlaresUtil.hasUnlimitedRegeneratingFlares(client.player))
         {
@@ -57,19 +55,17 @@ public class FlareHUDRenderer
             int regenBarMaxValue = ServerSettings.CURRENT.regeneratingFlaresRechargeTime.value * 20;
             if (count < ServerSettings.CURRENT.regeneratingFlaresMaxCharges.value)
             {
-                RenderSystem.disableTexture();
                 float h = Math.max(0.0F, currentRegenStatus / (float) regenBarMaxValue);
                 int i = Math.round(currentRegenStatus * 12.0F / regenBarMaxValue);
                 int j = MathHelper.hsvToRgb(h / 3, 1, 1);
                 renderGuiQuad(bufferBuilder, widgetX + 1, widgetY + 2, 2, 13, 0, 0, 0, 0);
                 renderGuiQuad(bufferBuilder, widgetX + 1, widgetY + 14 - i, 1, i, 111, j >> 16 & 255, j >> 8 & 255, j & 255);
-                RenderSystem.enableTexture();
             }
 
             //Amount Text
             String countText = String.valueOf(count);
             VertexConsumerProvider.Immediate provider = VertexConsumerProvider.immediate(bufferBuilder);
-            client.textRenderer.draw(countText, (float) (widgetX + 19 - 2 - client.textRenderer.getWidth(countText)), (float) (widgetY + 6 + 3), 16777215, true, matrixStack.peek().getPositionMatrix(), provider, false, 0, 15728880);
+            client.textRenderer.draw(countText, (float) (widgetX + 19 - 2 - client.textRenderer.getWidth(countText)), (float) (widgetY + 6 + 3), 16777215, true, matrixStack.peek().getPositionMatrix(), provider, TextRenderer.TextLayerType.NORMAL, 0, 15728880);
             provider.draw();
         }
 
@@ -79,7 +75,7 @@ public class FlareHUDRenderer
             matrixStack.push();
             matrixStack.scale(0.7f, 0.7f, 0.7f);
             VertexConsumerProvider.Immediate provider = VertexConsumerProvider.immediate(bufferBuilder);
-            client.textRenderer.draw(keyHintLabel, (float) (widgetX + 15) / 0.7f, (float) (widgetY - 4) / 0.7f, 16777215, true, matrixStack.peek().getPositionMatrix(), provider, false, 0, 15728880);
+            client.textRenderer.draw(keyHintLabel, (float) (widgetX + 15) / 0.7f, (float) (widgetY - 4) / 0.7f, 16777215, true, matrixStack.peek().getPositionMatrix(), provider, TextRenderer.TextLayerType.NORMAL, 0, 15728880);
             provider.draw();
             matrixStack.pop();
         }

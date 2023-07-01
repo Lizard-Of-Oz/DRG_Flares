@@ -22,7 +22,7 @@ import net.minecraft.entity.SpawnGroup;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.Packet;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -129,7 +129,7 @@ public class DRGFlareRegistryForge extends DRGFlareRegistry
     }
 
     @SubscribeEvent
-    public void registerCreativeTab(CreativeModeTabEvent.BuildContents event)
+    public void registerCreativeTabItems(CreativeModeTabEvent.BuildContents event)
     {
         if (creativeItemGroup.equals(event.getTab()))
             for (Map.Entry<FlareColor, Item> entry : flareItemTypes.entrySet())

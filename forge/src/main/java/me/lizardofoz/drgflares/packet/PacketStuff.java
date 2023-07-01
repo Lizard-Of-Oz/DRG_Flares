@@ -4,7 +4,7 @@ import me.lizardofoz.drgflares.config.ServerSettings;
 import me.lizardofoz.drgflares.util.DRGFlarePlayerAspect;
 import me.lizardofoz.drgflares.util.FlareColor;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.network.Packet;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
